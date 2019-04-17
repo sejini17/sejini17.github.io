@@ -1,1 +1,12 @@
 theme: jekyll-theme-hacker
+
+...
+title: 블로그 이름
+email: 블로그 관리자 메일 주소
+description: >- # this means to ignore newlines until "baseurl:"
+  블로그 소개글
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: 트위터계정명
+github_username:  Github계정명
+...
