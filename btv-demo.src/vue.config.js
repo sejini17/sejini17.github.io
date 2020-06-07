@@ -5,5 +5,8 @@ module.exports = {
 
   // outputDir: '../resources/static'
   outputDir: '../btv-demo',
-  publicPath: '/btv-demo/'
+  publicPath: '/btv-demo/',
+
+
+
 }
