@@ -227,7 +227,13 @@
         }
       },
       searchKeyword() {
-        alert(this.searchText)
+        // alert(this.searchText)
+
+        this.$axios.get('https://sejini17.github.io/test.json')
+          .then(res => {
+            // console.log(res.data)
+            this.items = res.data.items.slice(this.searchText)
+          })
       }
     },
   }
