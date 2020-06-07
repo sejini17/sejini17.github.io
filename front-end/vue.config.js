@@ -3,5 +3,7 @@ module.exports = {
     "vuetify"
   ],
 
-  outputDir: '../resources/static'
+  // outputDir: '../resources/static'
+  outputDir: '../btv-demo',
+  publicPath: '/btv-demo/'
 }
