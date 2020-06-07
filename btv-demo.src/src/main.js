@@ -1,9 +1,10 @@
 import Vue from 'vue'
-import App from './App.vue'
-import vuetify from './plugins/vuetify';
-import router from './router'
-
 import axios from 'axios' // import axios
+
+import vuetify from './plugins/vuetify';
+
+import router from './router'
+import App from './App.vue'
 
 Vue.prototype.$axios = axios; // prototype에 axios 추가
 

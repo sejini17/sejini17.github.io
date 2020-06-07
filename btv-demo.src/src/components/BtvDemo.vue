@@ -234,6 +234,9 @@
             // console.log(res.data)
             this.items = res.data.items.slice(this.searchText)
           })
+          .catch(err => {
+            console.error(err)
+          })
       }
     },
   }
