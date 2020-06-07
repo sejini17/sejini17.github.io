@@ -54,7 +54,7 @@
             >
             </v-form>
           </v-row>
-          
+
 
             <v-card
               color="gray"
@@ -82,7 +82,7 @@
 
             <v-subheader >Top Pick</v-subheader>
             <v-flex>
-              <v-carousel 
+              <v-carousel
                 height="300"
                 style="box-shadow: 0px 0px"
                 >
@@ -125,7 +125,7 @@
         <v-subheader >Random Pick</v-subheader>
         <v-row
         >
-          <v-col 
+          <v-col
             v-for="item in items"
             :key="item.src"
             cols="2"
@@ -140,7 +140,7 @@
                 :src="item.src"
               >
               </v-img>
-              
+
               <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
               <!-- <v-card-title>{{ item.title }}</v-card-title>
               <v-card-text class="text--primary">
@@ -168,7 +168,7 @@
       color="indigo"
       app
     >
-      <span class="white--text">&copy; 2019 SKT</span>
+      <span class="white--text">&copy; 2020 SKT</span>
     </v-footer>
   </v-app>
 </template>
@@ -220,9 +220,9 @@
         if (!this.selectedItem)
           return
         console.log("searchRelate" + item.id)
-        
+
         this.selectedItem = {
-          id: item.id, 
+          id: item.id,
           src: item.src
         }
       },
