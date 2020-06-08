@@ -172,14 +172,14 @@
         this.header2 = "Random Pick"
 
         //top100 list
-        this.$axios.get('/api/test-data/top100.json')
+        this.$axios.get('/test-data/top100.json')
           .then(res => {
             // console.log(res.data)
             this.items = res.data.items
           })
         
         //random list
-        this.$axios.get('/api/test-data/random.json')
+        this.$axios.get('/test-data/random.json')
           .then(res => {
             // console.log(res.data)
             this.subItems = res.data.items
@@ -193,7 +193,7 @@
           return
         }
 
-        this.$axios.get('/api/test-data/search_result.json')
+        this.$axios.get('/test-data/search_result.json')
           .then(res => {
             this.items = res.data.items
             this.subItems = []
@@ -210,7 +210,7 @@
         console.log("searchRelate : " + itemId)
 
         this.header2 = "유사 영화 콘텐츠"
-        this.$axios.get('/api/test-data/relate.json')
+        this.$axios.get('/test-data/relate.json')
           .then(res => {
             this.subItems = res.data.items
           })

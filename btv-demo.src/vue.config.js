@@ -19,6 +19,10 @@ module.exports = {
             '^/api': ''
         }
       },
+      '/test-data': {
+        target: 'https://sejini17.github.io',
+        changeOrigin: true
+      },
       '^/api-sample': {
         target: '<url>',
         ws: true,
