@@ -18,12 +18,12 @@
                       class="d-flex flex-row">
 
                       <v-card v-for="item in items.slice((i-1)*pageSize, (i-1)*pageSize+pageSize)" :key="item.src" 
-                        class="mx-auto"
+                        class="mx-auto "
                         max-width="100"
-                        max-height="100"
+                        ripple
+                        :raised="!item.blur"
                       >
                         <v-img
-                          class="white--text align-end"
                           :src="item.src"
                           @click="showDetail(item)"
                         >
@@ -71,10 +71,10 @@
         'header',
         'items', 'pageSize'
     ],
-    
     data: () => ({
       selectedItem: null,
     }),
+
     created () {
     },
     mounted() {
@@ -90,9 +90,19 @@
           id: item.id,
           src: item.src
         }
+        this.highlightItem(item)
 
         this.$emit('selected', item.id)
       },
+
+      highlightItem(selected) {
+        for (let item of this.items) 
+        {
+          item.blur = true
+// console.log("highlightItem : " + item.id)
+        }
+        selected.blur = false
+      }
 
     },
   }

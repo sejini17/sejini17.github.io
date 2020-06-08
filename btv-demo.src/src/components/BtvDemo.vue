@@ -32,17 +32,20 @@
         style="max-width: 650px"
       >
       </v-row>
-<!-- 
+
         <v-switch v-model="$vuetify.theme.dark" label="Dark theme"
           ></v-switch>
-           -->
+          
     </v-app-bar>
 
     <v-content class="pa-0">
       <v-container
         class="fill-height"
         fluid
+        pa-0 ma-0
+        justify-center
       >
+
         <v-img
             src="../assets/search_bg.jpg"
             height="200"
@@ -93,10 +96,13 @@
 
 
         <!-- first result list -->
-        <movie-list :pageSize="pageSize" :items="items" :header="header1" @selected="searchRelate"/>
+        <movie-list :pageSize="pageSize" :items="items" :header="header1" 
+          @selected="searchRelate"
+        />
 
         <!-- second result list -->
-        <movie-list :pageSize="pageSize" :items="subItems" :header="header2"/>
+        <movie-list :pageSize="pageSize" :items="subItems" :header="header2"
+        />
 
       </v-container>
     </v-content>
