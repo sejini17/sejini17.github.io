@@ -2,12 +2,11 @@
   <v-app id="inspire">
     <v-app-bar
       app
-      color="indigo"
+      color="#595959"
       dark
     >
-      <v-icon class="mx-4" large >
-        mdi-youtube
-      </v-icon>
+      <i class="ico btv_icon" ></i>
+      
       <v-toolbar-title class="pr-4">Btv Recommendation Demo</v-toolbar-title>
 
       <v-btn text >
@@ -108,7 +107,7 @@
     </v-content>
 
     <v-footer
-      color="indigo"
+      color="#595959"
       app
     >
       <span class="white--text">&copy; 2020 SKT</span>
@@ -227,3 +226,21 @@
     },
   }
 </script>
+
+<style scoped>
+.ico {
+    display: inline-block;
+    overflow: hidden;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+.ico.btv_icon {
+    background: url(../assets/btv_icon.png) no-repeat left top;
+    background-color: #595959;
+    background-size: 100%;
+    width: 32px;
+    height: 32px;
+    margin-right: 16px !important;
+    margin-left: 16px !important;
+}
+</style>
