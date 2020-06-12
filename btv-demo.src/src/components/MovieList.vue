@@ -19,7 +19,7 @@
 
                       <v-card v-for="item in curPageItems(items, i)" :key="item.src" 
                         class="mx-auto "
-                        max-width="100"
+                        max-width="180"
                         ripple
                         :raised="!item.blur"
                       >
@@ -33,8 +33,7 @@
                       <!-- 공백 채우기용 -->
                       <v-card v-for="i in remainItemCount(items, i)" :key="i" 
                         class="mx-auto"
-                        width="100"
-                        max-height="100"
+                        width="180"
                       >
                         <v-img >
                         </v-img>
@@ -95,7 +94,7 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            flat
+            text
             @click="showDialog = false"
           >
             닫기
@@ -108,6 +107,8 @@
 </template>
 
 <script>
+  let imgSrcPrefix = 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156'
+  let sampleImgSrc = imgSrcPrefix + '/pstr/master/CF/29/20170802205741178.jpg'
   export default {
     // props: {
     //   pageSize: Number,
@@ -121,7 +122,9 @@
 
       showDialog: false,
       dTitle: "",
-      dContent: ""
+      dContent: "",
+
+      testSrc: sampleImgSrc
     }),
     computed: {
     },
