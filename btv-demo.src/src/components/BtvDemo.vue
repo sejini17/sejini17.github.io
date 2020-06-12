@@ -1,5 +1,6 @@
 <template>
   <v-app id="inspire">
+    <!-- app-bar -------------------------------------------------------->
     <v-app-bar
       app
       color="#595959"
@@ -37,6 +38,7 @@
           
     </v-app-bar>
 
+    <!-- content -------------------------------------------------------->
     <v-content class="pa-0">
       <v-container
         class="fill-height"
@@ -45,6 +47,7 @@
         justify-center
       >
 
+        <!-- 검색창 -->
         <v-img
             src="../assets/search_bg.jpg"
             height="300"
@@ -97,6 +100,7 @@
       </v-container>
     </v-content>
 
+    <!-- footer -------------------------------------------------------->
     <v-footer
       color="#595959"
       app
