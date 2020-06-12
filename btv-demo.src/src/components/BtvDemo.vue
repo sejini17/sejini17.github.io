@@ -11,10 +11,13 @@
       <v-toolbar-title class="pr-4">Btv Recommendation Demo</v-toolbar-title>
 
       <v-btn text to="/">
-        유사 영화 검색
-      </v-btn>
-      <v-btn text to="/theme">
         테마 큐레이션
+      </v-btn>
+      <!-- <v-btn text to="/theme">
+        테마 큐레이션
+      </v-btn> -->
+      <v-btn text to="/relate">
+        유사 영화 검색
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -41,7 +44,7 @@
 
         <!-- 검색창 -->
         <v-img
-            src="../assets/search_bg.jpg"
+            src="@/assets/search_bg.jpg"
             height="300"
             >
 <v-layout column fill-height>
