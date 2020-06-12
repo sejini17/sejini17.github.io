@@ -1,7 +1,8 @@
 <template>
     <v-container pa-0 ma-0>
         
-        <v-row>
+        <!-- carousel ----------------------------------------------------------->
+        <v-row v-if="!viewMode">
           <v-col>
 
             <v-subheader >{{ header }}</v-subheader>
@@ -45,10 +46,72 @@
               </v-carousel>
             </v-flex>
           </v-col>
-
         </v-row>
 
-        <!-- 선택된 항목 상세정보 -->
+
+        <!-- slide ----------------------------------------------------------->
+        <v-row v-if="viewMode == 1">
+          <v-col>
+
+            <v-subheader >{{ header }}</v-subheader>
+
+            <v-sheet
+              class="mx-auto"
+            >
+              <v-slide-group
+                class="pa-4"
+                center-active
+                show-arrows
+              >
+                <v-slide-item
+                  v-for="item in items"
+                  :key="item.src" 
+                  v-slot:default="{ active, toggle }"
+                >
+                  <v-card
+                    :color="active ? 'primary' : 'black'"
+                    @click="toggle"
+                    height="200"
+                    width="100"
+                    class="ma-4"
+
+                    ripple
+                    :raised="!item.blur"
+                    align-center justify-center
+                  >
+                    <v-img
+                      :src="item.src"
+                      @click="showDetail(item)"
+                    >
+                    </v-img>
+
+                    <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
+                    <!-- 
+                      <v-card-title>{{ item.title }}</v-card-title>
+                    <v-card-text class="text--primary">
+                      <div>{{item.src}}</div>
+                    </v-card-text> 
+
+                    <v-card-actions>
+                      <v-btn color="orange" text >
+                        상세보기
+                      </v-btn>
+                      <v-btn color="orange" text >
+                        관련영화
+                      </v-btn>
+                    </v-card-actions>
+                    -->
+                  </v-card>
+                </v-slide-item>
+              </v-slide-group>
+             </v-sheet>
+
+
+
+          </v-col>
+        </v-row>
+
+        <!-- 선택된 항목 상세정보 ------------------------------------------->
         <v-row v-if="selectedItem">
           <v-card
             class="mx-auto"
@@ -59,6 +122,7 @@
         </v-row>
 
 
+    <!-- 선택된 항목 상세정보 dialog ------------------------------------------->
     <v-dialog
       v-model="showDialog"
       width="500"
@@ -114,8 +178,9 @@
     //   pageSize: Number,
     // },
     props: [
-        'header',
-        'items', 'pageSize'
+      'viewMode',
+      'header',
+      'items', 'pageSize'
     ],
     data: () => ({
       selectedItem: null,
