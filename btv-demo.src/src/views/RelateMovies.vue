@@ -27,10 +27,8 @@
     },
     data: () => ({
       pageSize: 10,
-      selectedItem: null,
 
-      items: [
-      ],
+      items: [],
       subItems: [],
 
       header1: "",
