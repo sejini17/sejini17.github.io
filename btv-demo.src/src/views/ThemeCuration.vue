@@ -3,11 +3,13 @@
         pa-0 ma-0
         justify-center
       >
-      
-        <movie-list :pageSize="pageSize" :items="items" :header="header1" 
+      <template>
+        <movie-list v-for="item in itemList" :key="item.header"
+          :pageSize="pageSize" :items="item.items" :header="item.header" viewMode="1"
           @selected="searchRelate"
         />
-        
+      </template>
+
       </v-container>
 </template>
 
@@ -27,12 +29,10 @@
       pageSize: 10,
       selectedItem: null,
 
-      items: [
-      ],
+      itemList: [],
       subItems: [],
 
       header1: "",
-      header2: ""
     }),
     created () {
       this.$eventBus.$on('searchKeyword', (value) => this.searchKeyword(value))
@@ -46,21 +46,10 @@
       },
 
       resetSearch() {
-        this.header1 = "테마 큐레이션"
-        this.header2 = "Random Pick"
-
-        //top100 list
-        this.$axios.get('/test-data/top100.json')
+        this.$axios.get('/test-data/theme_curation.json')
           .then(res => {
             // console.log(res.data)
-            this.items = res.data.items
-          })
-        
-        //random list
-        this.$axios.get('/test-data/random.json')
-          .then(res => {
-            // console.log(res.data)
-            this.subItems = res.data.items
+            this.itemList = res.data
           })
       },
 
@@ -71,13 +60,11 @@
           return
         }
 
-        this.$axios.get('/test-data/search_result.json')
+        this.$axios.get('/test-data/theme_result.json')
           .then(res => {
-            this.items = res.data.items
+            this.itemList = res.data
             this.subItems = []
 
-            this.header1 = "검색 결과"
-            this.header2 = "유사 영화 콘텐츠"
           })
           .catch(err => {
             console.error(err)
@@ -86,11 +73,10 @@
 
       searchRelate(itemId) {
         console.log("searchRelate : " + itemId)
-
-        this.header2 = "유사 영화 콘텐츠"
         this.$axios.get('/test-data/relate.json')
           .then(res => {
             this.subItems = res.data.items
+            console.log(res.data)
           })
           .catch(err => {
             console.error(err)
