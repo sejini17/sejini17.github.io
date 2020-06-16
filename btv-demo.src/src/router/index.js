@@ -10,7 +10,7 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'home',
-    component: ThemeCuration
+    component: RelateMovies
   },
   {
     path: '/relate',

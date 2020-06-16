@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <BtvDemo/>
 <!--       
       <div id="nav">
@@ -10,7 +10,7 @@
       <router-view/> 
 -->
 
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

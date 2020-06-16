@@ -11,14 +11,16 @@
       <v-toolbar-title class="pr-4">Btv Recommendation Demo</v-toolbar-title>
 
       <v-btn text to="/">
-        테마 큐레이션
-      </v-btn>
-      <!-- <v-btn text to="/theme">
-        테마 큐레이션
-      </v-btn> -->
-      <v-btn text to="/relate">
         유사 영화 검색
       </v-btn>
+      <v-btn text to="/theme">
+        테마 큐레이션
+      </v-btn>
+<!--       
+      <v-btn text to="/relate">
+        유사 영화 검색
+      </v-btn> 
+-->
 
       <v-spacer></v-spacer>
 
@@ -27,32 +29,31 @@
         style="max-width: 650px"
       >
       </v-row>
-        <v-switch v-model="$vuetify.theme.dark" label="Dark theme"
-          ></v-switch>
-          
+<!--       
+        <v-switch v-model="$vuetify.theme.dark" label="Dark theme" />
+           -->
     </v-app-bar>
 
     <!-- content -------------------------------------------------------->
-    <v-content class="pa-0">
+    <v-main class="pa-0 ma-0">
       <v-container
-        class="fill-height"
+      fill-height
         fluid
         pa-0 ma-0
         justify-center
-        align-start
+        align-content-start
       >
 
         <!-- 검색창 -->
         <v-img
             src="@/assets/search_bg.jpg"
-            height="300"
+            height="150"
             >
 <v-layout column fill-height>
   <v-flex xs12 fill-height>
       <v-layout align-center justify-center row fill-height>
               <v-card
                 color="gray"
-                class=""
                 width="600"
               >
                 <v-text-field v-model="searchText" @keyup.enter="searchKeyword"
@@ -70,7 +71,6 @@
               
               <v-card
                 color="red"
-                class=""
               >
                 <v-btn text color="black"
                   @click="searchKeyword"
@@ -82,10 +82,10 @@
 
         </v-img>
 
-        <router-view ma-0 pa-0 /> 
+        <router-view/> 
 
       </v-container>
-    </v-content>
+    </v-main>
 
     <!-- footer -------------------------------------------------------->
     <v-footer
@@ -142,7 +142,7 @@
     vertical-align: top;
 }
 .ico.btv_icon {
-    background: url(../assets/btv_icon.png) no-repeat left top;
+    background: url(../assets/btv_logo.png) no-repeat left top;
     background-color: #595959;
     background-size: 100%;
     width: 32px;
