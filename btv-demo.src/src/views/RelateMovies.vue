@@ -7,7 +7,7 @@
           @selected="searchRelate"
         />
         <!-- second result list -->
-        <movie-list2 :pageSize="pageSize" :items="subItems" :header="header2"
+        <movie-list2 :pageSize="pageSize" :items="subItems" :header="header2" ref="secList"
         />
       </v-container>
 </template>
@@ -20,7 +20,7 @@
   function getRandomItem(arr, size) {
     //deep copy
     arr = JSON.parse(JSON.stringify( arr ))
-    
+
     let result = []
     for (var i = 0; i < size; i++) {
       let randIdx = getRandomInt(0, arr.length-1)
@@ -102,13 +102,23 @@
           })
       },
 
-      searchRelate(itemId) {
-        console.log("searchRelate : " + itemId)
+      searchRelate(item) {
+        this.$refs.secList.reset()
 
-        this.header2 = "유사 영화 콘텐츠"
-        // this.$axios.post('http://localhost:8857/vod/btv/api/v1.0/sim_contents')
-        this.$axios.get('https://sejini17.github.io/test-data/test_result.json')
+        this.$axios.post(
+          // 'http://localhost:8857'+
+          // 'http://172.27.98.159:8857'+
+          '/vod/btv/api/v1.0/sim_content', 
+          {
+            "s_id" : item.series_id,
+            "topn" : randomSize
+          }
+        )
+// console.log(item)
+        // this.$axios.get('https://sejini17.github.io/test-data/test_result.json')
+
           .then(res => {
+            this.header2 = "유사 영화 콘텐츠 " + randomSize
             this.subItems = res.data.response.sim_contents
           })
           .catch(err => {

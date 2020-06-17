@@ -1,79 +1,78 @@
 <template>
-    <v-container pa-0 ma-0>
+  <v-container pa-0 ma-0>
         
-        <!-- slide ----------------------------------------------------------->
-        <v-row>
-          <v-col>
+    <!-- slide ----------------------------------------------------------->
+    <v-row>
+      <v-col>
 
-            <v-subheader >{{ header }}</v-subheader>
+        <v-subheader >{{ header }}</v-subheader>
 
-            <v-sheet 
-              class="mx-auto"
+        <v-sheet 
+          class="mx-auto"
+        >
+          <v-slide-group v-if="items"
+            v-model="slideModel"
+            class="pa-4"
+            center-active
+            show-arrows
+          >
+            <v-slide-item
+              v-for="item in items"
+              :key="item.series_id" 
+              v-slot:default="{ active, toggle }"
             >
-              <v-slide-group v-if="items"
-                class="pa-4"
-                center-active
-                show-arrows
+              <v-card
+                :color="active ? 'primary' : 'black'"
+                @click="toggle"
+                height="156"
+                width="115"
+                class="ma-4"
+
+                ripple
+                :raised="!item.blur"
+                align-center justify-center
               >
-                <v-slide-item
-                  v-for="item in items"
-                  :key="item.series_id" 
-                  v-slot:default="{ active, toggle }"
+                <v-img
+                  :src="item.img ? item.img : urlImg + item.thumbnail"
+                  @click="showDetail(item)"
                 >
-                  <v-card
-                    :color="active ? 'primary' : 'black'"
-                    @click="toggle"
-                    height="156"
-                    width="115"
-                    class="ma-4"
+                </v-img>
 
-                    ripple
-                    :raised="!item.blur"
-                    align-center justify-center
-                  >
-                    <v-img
-                      :src="item.img ? item.img : urlImg + item.thumbnail"
-                      @click="showDetail(item)"
-                    >
-                    </v-img>
+                <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
+                <!-- 
+                  <v-card-title>{{ item.title }}</v-card-title>
+                <v-card-text class="text--primary">
+                  <div>{{item.src}}</div>
+                </v-card-text> 
 
-                    <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
-                    <!-- 
-                      <v-card-title>{{ item.title }}</v-card-title>
-                    <v-card-text class="text--primary">
-                      <div>{{item.src}}</div>
-                    </v-card-text> 
-
-                    <v-card-actions>
-                      <v-btn color="orange" text >
-                        상세보기
-                      </v-btn>
-                      <v-btn color="orange" text >
-                        관련영화
-                      </v-btn>
-                    </v-card-actions>
-                    -->
-                  </v-card>
-                </v-slide-item>
-              </v-slide-group>
-             </v-sheet>
+                <v-card-actions>
+                  <v-btn color="orange" text >
+                    상세보기
+                  </v-btn>
+                  <v-btn color="orange" text >
+                    관련영화
+                  </v-btn>
+                </v-card-actions>
+                -->
+              </v-card>
+            </v-slide-item>
+          </v-slide-group>
+          </v-sheet>
 
 
 
-          </v-col>
-        </v-row>
+      </v-col>
+    </v-row>
 
-        <!-- 선택된 항목 상세정보 ------------------------------------------->
-      <v-expansion-panels>
-        <v-expansion-panel v-if="selectedItem">
-          <v-expansion-panel-header>선택항목 json</v-expansion-panel-header>
-          <v-expansion-panel-content>
-            {{selectedItem}}
-            <!-- {{selectedItem.img}}
-            {{selectedItem.thumbnail}} -->
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+    <!-- 선택된 항목 상세정보 ------------------------------------------->
+    <v-expansion-panels>
+      <v-expansion-panel v-if="selectedItem">
+        <v-expansion-panel-header>선택항목 json</v-expansion-panel-header>
+        <v-expansion-panel-content>
+          {{selectedItem}}
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <!-- 선택된 항목 상세정보 dialog ------------------------------------------->
     <v-dialog
       v-model="showDialog"
@@ -113,7 +112,7 @@
                   <v-list-item-title >{{item.name}}: </v-list-item-title>
                     {{Array.isArray(item.value) ? "" : item.value}}
                     <template v-if="Array.isArray(item.value)">
-                      <v-chip v-for="value in item.value" :key="value"
+                      <v-chip v-for="(value, i) in item.value" :key="value+i"
                         label ma-2
                         text-color="white"
                       >{{value}}
@@ -142,11 +141,12 @@
       </v-card>
     </v-dialog>
 
-    </v-container>
+  </v-container>
 </template>
 
 <script>
   export default {
+    name: "MovieList2",
     // props: {
     //   pageSize: Number,
     // },
@@ -160,7 +160,8 @@
 
       showDialog: false,
 
-      urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156'
+      urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
+      slideModel: null
     }),
     computed: {
     },
@@ -170,6 +171,10 @@
     mounted() {
     },
     methods: {
+      reset() {
+        this.slideModel = 0
+        this.selectedItem = null
+      },
       showDetail(item) {
         this.selectedItem = {
           title : item.title_display ? item.title_display : item.title,
@@ -208,7 +213,7 @@
 
         this.showDialog = true
 
-        this.$emit('selected', item.series_id)
+        this.$emit('selected', item)
       },
 
       highlightItem(selected) {
