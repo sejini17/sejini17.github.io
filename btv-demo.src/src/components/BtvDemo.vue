@@ -7,7 +7,6 @@
       dark
     >
       <i class="ico btv_icon" ></i>
-      
       <v-toolbar-title class="pr-4">Btv Recommendation Demo</v-toolbar-title>
 
       <v-btn text to="/">
@@ -21,14 +20,7 @@
         유사 영화 검색
       </v-btn> 
 -->
-
       <v-spacer></v-spacer>
-
-      <v-row
-        align="center"
-        style="max-width: 650px"
-      >
-      </v-row>
 <!--       
         <v-switch v-model="$vuetify.theme.dark" label="Dark theme" />
            -->
@@ -49,37 +41,36 @@
             src="@/assets/search_bg.jpg"
             height="150"
             >
-<v-layout column fill-height>
-  <v-flex xs12 fill-height>
-      <v-layout align-center justify-center row fill-height>
-              <v-card
-                color="gray"
-                width="600"
-              >
-                <v-text-field v-model="searchText" @keyup.enter="searchKeyword"
-                  :append-icon-cb="() => {}"
-                  placeholder="SEARCH"
-                  single-line
-                  append-icon="mdi-magnify"
-                  color="white"
-                  hide-details
-                  outlined
-                  filled
-                  dense
-                ></v-text-field>
-              </v-card>
-              
-              <v-card
-                color="red"
-              >
-                <v-btn text color="black"
-                  @click="searchKeyword"
-                >SEARCH</v-btn>
-              </v-card>
-      </v-layout>
-  </v-flex>
-</v-layout>
-
+          <v-layout column fill-height>
+            <v-flex fill-height>
+              <v-layout align-center justify-center row fill-height>
+                <v-card
+                  color="gray"
+                  width="600"
+                >
+                  <v-text-field v-model="searchText" @keyup.enter="searchKeyword"
+                    :append-icon-cb="() => {}"
+                    placeholder="SEARCH"
+                    single-line
+                    append-icon="mdi-magnify"
+                    color="white"
+                    hide-details
+                    outlined
+                    filled
+                    dense
+                  ></v-text-field>
+                </v-card>
+                
+                <v-card
+                  color="red"
+                >
+                  <v-btn text color="black"
+                    @click="searchKeyword"
+                  >SEARCH</v-btn>
+                </v-card>
+              </v-layout>
+            </v-flex>
+          </v-layout>
         </v-img>
 
         <router-view/> 
