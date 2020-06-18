@@ -2,13 +2,24 @@
       <v-container 
         pa-0 ma-0
       >
-        <!-- first result list -->
-        <movie-list2 :pageSize="pageSize" :items="items" :header="header1" viewMode="1"
-          @selected="searchRelate"
-        />
-        <!-- second result list -->
-        <movie-list2 :pageSize="pageSize" :items="subItems" :header="header2" ref="secList"
-        />
+        <v-layout column>
+          <v-flex >
+            <!-- first result list -->
+            <movie-list2 :items="topItems" :header="headerTop"
+              @selected="searchRelate"
+            />
+            <!-- second result list -->
+            <movie-list2 :items="randItems" :header="headerRand"
+              @selected="searchRelate"
+            />
+            
+            <!-- 연관 영화 목록
+             -->
+            <movie-grid  v-if="relateItems.length"
+              :items="relateItems" :header="headerReleate"
+            />
+          </v-flex>
+        </v-layout>
       </v-container>
 </template>
 
@@ -30,10 +41,11 @@
     return result
   }
 
-  let randomSize = 33
+  let randomSize = 10
 
   // @ is an alias to /src
   import MovieList2 from '@/components/MovieList2';
+  import MovieGrid from '@/components/MovieGrid';
 
   export default {
     name: 'RelateMovie',
@@ -41,16 +53,17 @@
       searchText: String,
     },
     components: {
-      MovieList2
+      MovieList2,
+      MovieGrid
     },
     data: () => ({
-      pageSize: 10,
+      topItems: [],
+      randItems: [],
+      relateItems: [],
 
-      items: [],
-      subItems: [],
-
-      header1: "",
-      header2: ""
+      headerTop: "Top Pick",
+      headerRand: "Random Pick",
+      headerReleate: "유사 영화 콘텐츠"
     }),
     created () {
       this.$eventBus.$on('searchKeyword', (value) => this.searchKeyword(value))
@@ -65,22 +78,14 @@
       },
 
       resetSearch() {
-        this.header1 = "Top Pick"
-        this.header2 = "Random Pick " + randomSize
-
         //top100 list
         this.$axios.get('/test-data/top100.json')
           .then(res => {
-            this.items = res.data
-
-            this.subItems = getRandomItem(this.items, randomSize)
+            this.topItems = res.data
+            //random list
+            this.randItems = getRandomItem(this.topItems, randomSize)
           })
-        
-        //random list
-        // this.$axios.get('/test-data/top100.json')
-        //   .then(res => {
-        //     this.subItems = getRandomItem(res.data, randomSize)
-        //   })
+        this.relateItems = []
       },
 
       searchKeyword(searchText) {
@@ -91,11 +96,10 @@
 
         this.$axios.get('/test-data/search_result.json')
           .then(res => {
-            this.items = res.data.items
-            this.subItems = null
+            this.topItems = res.data.items
+            this.relateItems = []
 
-            this.header1 = "검색 결과"
-            this.header2 = "유사 영화 콘텐츠"
+            this.headerTop = "검색 결과"
           })
           .catch(err => {
             console.error(err)
@@ -103,23 +107,25 @@
       },
 
       searchRelate(item) {
-        this.$refs.secList.reset()
+        // this.$refs.secList.reset()
 
+// console.log(item)
+        let size = 12 * 10
         this.$axios.post(
           // 'http://localhost:8857'+
           // 'http://172.27.98.159:8857'+
           '/vod/btv/api/v1.0/sim_content', 
           {
             "s_id" : item.series_id,
-            "topn" : randomSize
+            "topn" : size
           }
         )
-// console.log(item)
         // this.$axios.get('https://sejini17.github.io/test-data/test_result.json')
 
           .then(res => {
-            this.header2 = "유사 영화 콘텐츠 " + randomSize
-            this.subItems = res.data.response.sim_contents
+            this.relateItems = res.data.response.sim_contents.sort(
+              (a, b) => a.dist - b.dist // 오름차순
+            );
           })
           .catch(err => {
             console.error(err)

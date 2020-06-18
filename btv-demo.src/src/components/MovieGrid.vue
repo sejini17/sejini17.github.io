@@ -1,77 +1,86 @@
 <template>
   <v-container pa-0 ma-0>
         
-    <v-layout column>
-      <v-flex >
+    <!-- slide ----------------------------------------------------------->
+    <v-row>
+      <v-col>
 
         <v-subheader >{{ header }}</v-subheader>
 
         <v-sheet 
           class="mx-auto"
         >
-          <!-- slide ----------------------------------------------------------->
-          <v-slide-group v-if="items"
-            v-model="slideModel"
-            class="pa-4"
-            center-active
-            show-arrows
-          >
-            <v-slide-item
-              v-for="item in items"
-              :key="item.series_id" 
-              v-slot:default="{ active, toggle }"
-            >
-              <v-card
-                :color="active ? 'primary' : 'black'"
-                @click="toggle"
-                height="156"
-                width="115"
-                class="ma-4"
+            <v-container fluid>
+            <v-row>
+                <v-col
+                    class="d-flex child-flex"
+                    xs-12 md-4 xl-2
+                    align-start
+                    justify-start
 
-                ripple
-                :raised="!item.blur"
-                align-center justify-center
-              >
-                <v-img
-                  :src="item.img ? item.img : urlImg + item.thumbnail"
-                  @click="showDetail(item)"
+                    v-for="item in items"
+                    :key="item.series_id" 
                 >
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-
-                <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
-                <!-- 
-                  <v-card-title>{{ item.title }}</v-card-title>
-                <v-card-text class="text--primary">
-                  <div>{{item.src}}</div>
-                </v-card-text> 
-
-                <v-card-actions>
-                  <v-btn color="orange" text >
-                    상세보기
-                  </v-btn>
-                  <v-btn color="orange" text >
-                    관련영화
-                  </v-btn>
-                </v-card-actions>
+                <!-- {{item.img ? item.img : urlImg + item.thumbnail}} 
+    height="156"
+    width="115"
                 -->
-              </v-card>
-            </v-slide-item>
-          </v-slide-group>
-          </v-sheet>
+<v-card
+        :aspect-ratio="115/156"
+        width="115"
+        height="156"
+    class="ma-4 "
 
-      </v-flex>
-    </v-layout>
+    ripple
+    align-center justify-center
+    flat tile
+    >
+    <v-img
+        :src="item.img ? item.img : urlImg + item.thumbnail"
+        @click="showDetail(item)"
 
-    <!-- 선택된 항목 상세정보 dialog -----------------------------------------
+        max-width="115"
+        max-height="156"
+    >
+        <template v-slot:placeholder>
+        <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center"
+        >
+            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+        </v-row>
+        </template>
+    </v-img>
+
+    <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
+    <!-- 
+        <v-card-title>{{ item.title }}</v-card-title>
+    <v-card-text class="text--primary">
+        <div>{{item.src}}</div>
+    </v-card-text> 
+
+    <v-card-actions>
+        <v-btn color="orange" text >
+        상세보기
+        </v-btn>
+        <v-btn color="orange" text >
+        관련영화
+        </v-btn>
+    </v-card-actions>
+    -->
+</v-card>
+                </v-col>
+            </v-row>
+            </v-container>
+        </v-sheet>
+
+
+
+      </v-col>
+    </v-row>
+
+    <!-- 선택된 항목 상세정보 dialog ------------------------------------------->
     <v-dialog
       v-model="showDialog"
       width="500"
@@ -127,30 +136,25 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
--->
 
   </v-container>
 </template>
 
 <script>
   export default {
-    name: "MovieList2",
+    name: "MovieGrid",
     // props: {
     //   pageSize: Number,
     // },
     props: [
       'header',
       'items',
-
-      'viewMode',
     ],
     data: () => ({
       selectedItem: null,
-
-      isShowDetail: false,
+      showDialog: false,
 
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
-      slideModel: null
     }),
     computed: {
     },
@@ -161,15 +165,9 @@
     },
     methods: {
       reset() {
-        this.slideModel = 0
         this.selectedItem = null
       },
       showDetail(item) {
-        console.log("selected : ")
-        console.log(item)
-
-        if (!item) return
-
         this.selectedItem = {
           title : item.title_display ? item.title_display : item.title,
           content : 
@@ -199,10 +197,22 @@
               { name : "kmdb_kwd", value : item.kmdb_kwd, icon : "mdi-tag" },
             ]
         }
+        if (!this.selectedItem)
+          return
+        console.log("showDetail : " + item.series_id)
 
-        this.isShowDetail = true
+        this.highlightItem(item)
+
+        this.showDialog = true
 
         this.$emit('selected', item)
+      },
+
+      highlightItem(selected) {
+        for (let item of this.items) 
+          item.blur = true
+
+        selected.blur = false
       },
 
     },
