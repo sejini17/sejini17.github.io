@@ -159,7 +159,9 @@
           }
         )
           .then(res => {
-            this.selectedItem = res.data.response.documents[0]
+            this.selectedItem  = res.data.response.documents[0]
+            this.selectedItem.kmdb_kwd_refine = item.kmdb_kwd_refine
+            this.selectedItem.kmdb_kwd = item.kmdb_kwd
 
             if (!this.selectedItem)
                 return

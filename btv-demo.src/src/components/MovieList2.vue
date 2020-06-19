@@ -4,7 +4,13 @@
     <v-row>
       <v-col>
 
-        <v-subheader >{{ header }}</v-subheader>
+                 
+        <v-subheader>
+          {{ header }}
+          <v-btn color="green" icon @click="refresh()" v-if="refreshable" >
+            <v-icon>mdi-cached</v-icon>
+          </v-btn> 
+        </v-subheader>
 <!--         
         <v-btn color="orange" icon  >
           <v-icon>mdi-cached</v-icon>
@@ -100,7 +106,7 @@
       'header',
       'items',
 
-      'viewMode',
+      'refreshable',
     ],
     data: () => ({
       selectedItem: null,
@@ -130,8 +136,10 @@
       },
       unselect() {
         this.selectedItem = null
+      },
+      refresh() {
+        this.$emit('reqRefresh')
       }
-
     },
   }
 </script>

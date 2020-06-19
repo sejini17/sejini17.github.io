@@ -11,6 +11,7 @@
             <!-- second result list -->
             <movie-list2 :items="randItems" :header="headerRand" ref="secList"
               @selected="searchRelate"
+              refreshable="true" @reqRefresh="refreshRand"
             />
             
             <!-- 연관 영화 목록
@@ -85,13 +86,16 @@
           .then(res => {
             this.topItems = res.data
             //random list
-            this.randItems = getRandomItem(this.topItems, randomSize)
+            this.refreshRand()
           })
         this.relateItems = []
 
         this.headerTop = 'Top Pick'
         this.headerRand = 'Random Pick'
         this.headerReleate = '유사 영화 콘텐츠'
+      },
+      refreshRand() {
+        this.randItems = getRandomItem(this.topItems, randomSize)
       },
 
       searchKeyword(searchText) {
