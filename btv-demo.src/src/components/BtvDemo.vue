@@ -28,15 +28,14 @@
 
     <!-- content -------------------------------------------------------->
     <v-main class="pa-0 ma-0">
-      <v-container
-      fill-height
-        fluid
+      <v-container fill-height fluid
         pa-0 ma-0
         justify-center
         align-content-start
       >
 
-        <!-- 검색창 -->
+        <!-- 검색창 
+        -->
         <v-img
             src="@/assets/search_bg.jpg"
             height="150"
@@ -95,7 +94,7 @@
     components: {
     },
     data: () => ({
-      searchText:"",
+      searchText:'',
 
     }),
     created () {
@@ -109,7 +108,7 @@
       },
 
       resetSearch() {
-        console.log("resetSearch")
+        console.log('resetSearch')
         this.$eventBus.$emit('searchKeyword')
       },
 
@@ -118,7 +117,7 @@
           this.resetSearch()
           return
         }
-        console.log("searchKeyword : " + this.searchText)
+        console.log('searchKeyword : ' + this.searchText)
         this.$eventBus.$emit('searchKeyword', this.searchText)
       },
     },
