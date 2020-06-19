@@ -28,12 +28,12 @@
     <v-row>
       <v-col
       >개봉일</v-col>
-      <v-col>{{item.date}}</v-col>
+      <v-col>{{[ item.date, "YYYYMMDD" ] | moment('YYYY-MM-DD')}}</v-col>
     </v-row>
     <v-row>
       <v-col
       >관객동원 수</v-col>
-      <v-col>{{item.kb_audience}}</v-col>
+      <v-col>{{item.kb_audience | comma}}</v-col>
     </v-row>
     <v-row>
       <v-col
@@ -129,6 +129,9 @@
     watch: {
     },
     filters: {
+      comma(val){
+        return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
     },
 
     created () { 
