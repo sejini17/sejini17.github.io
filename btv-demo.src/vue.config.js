@@ -3,11 +3,11 @@ module.exports = {
     "vuetify"
   ],
 
-  // outputDir: '../resources/static'
-  // publicPath: '/',
-  
   outputDir: '../btv-demo',
-  publicPath: '/btv-demo/',
+  // publicPath: '/btv-demo/',
+  publicPath: '/',
+  // outputDir: '../resources/static'
+  
 
 
   devServer: {
@@ -32,9 +32,8 @@ module.exports = {
         changeOrigin: true
       },
 
-      '/vod/btv/api/v1.0/sim_content': {
+      '/vod': {
         target: 'http://localhost:8857',
-          // target: 'https://sejini17.github.io/test-data/test_result.json',
         changeOrigin: true
       },
     }

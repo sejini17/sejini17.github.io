@@ -43,13 +43,13 @@
         max-height="156"
     >
         <template v-slot:placeholder>
-        <v-row
-            class="fill-height ma-0"
-            align="center"
-            justify="center"
-        >
-            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-        </v-row>
+          <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+          >
+              <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+          </v-row>
         </template>
     </v-img>
 
@@ -91,34 +91,13 @@
           class="headline grey"
           primary-title
         >
-          {{selectedItem.title}}
+          {{selectedItem.title_display}}
         </v-card-title>
 
         <v-card-text>
+            <MovieDetail :item="selectedItem"
+            />
           <v-list disabled>
-            <v-subheader>상세정보</v-subheader>
-            
-            <v-list-item-group v-model="selectedItem">
-              <v-list-item v-for="item in selectedItem.content" :key="item.name">
-
-                <v-list-item-icon v-if="item.icon">
-                  <v-icon>{{item.icon}}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title >{{item.name}}: </v-list-item-title>
-                    {{Array.isArray(item.value) ? "" : item.value}}
-                    <template v-if="Array.isArray(item.value)">
-                      <v-chip v-for="(value, i) in item.value" :key="value+i"
-                        label ma-2
-                        text-color="white"
-                      >{{value}}
-                      </v-chip>
-                    </template>
-                </v-list-item-content>
-
-              </v-list-item>
-            </v-list-item-group>
-            
           </v-list>
         </v-card-text>
 
@@ -141,11 +120,14 @@
 </template>
 
 <script>
+  import MovieDetail from '@/components/MovieDetail';
+
   export default {
-    name: "MovieGrid",
-    // props: {
-    //   pageSize: Number,
-    // },
+    name: 'MovieGrid',
+    components: {
+      MovieDetail
+    },
+
     props: [
       'header',
       'items',
@@ -156,56 +138,44 @@
 
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
     }),
-    computed: {
-    },
 
-    created () {
-    },
-    mounted() {
-    },
+    computed: { },
+    watch: { },
+    created () { },
+    mounted() { },
+
     methods: {
       reset() {
         this.selectedItem = null
       },
       showDetail(item) {
-        this.selectedItem = {
-          title : item.title_display ? item.title_display : item.title,
-          content : 
-            item.kb_id ? [
-              { name : "영문제목", value : item.title_english },
-              { name : "장르", value : item.sub_genre },
-              { name : "kb_kmdb_genre", value : item.kb_kmdb_genre },
-              { name : "국가", value : item.country },
-              { name : "mood", value : item.mood },
+        this.reset()
 
-              { name : "kb_distributors", value : item.kb_distributors },
-              { name : "kb_producers", value : item.kb_producers },
+        this.$axios.post(
+          '/vod/btv/api/v1.0/meta-id-search', 
+          {
+            'query' : item.series_id,
+            'topn' : 1
+          }
+        )
+          .then(res => {
+            this.selectedItem = res.data.response.documents[0]
 
-              { name : "감독", value : item.director, icon : "mdi-account" },
-              { name : "배우", value : item.actor, icon : "mdi-account" },
-              
-              { name : "synonyms", value : item.synonyms, icon : "mdi-tag" },
-              { name : "kb_kmdb_keyword", value : item.kb_kmdb_keyword, icon : "mdi-tag" },
-            ]
-            : [
-              { name : "장르", value : item.sub_genre },
-              { name : "국가", value : item.country },
-              { name : "release", value : item.release },
+            if (!this.selectedItem)
+                return
+            console.log('showDetail : ' + item.series_id)
 
-              { name : "배우", value : item.actor, icon : "mdi-account" },
+            // this.highlightItem(item)
 
-              { name : "kmdb_kwd", value : item.kmdb_kwd, icon : "mdi-tag" },
-            ]
-        }
-        if (!this.selectedItem)
-          return
-        console.log("showDetail : " + item.series_id)
+            this.showDialog = true
 
-        this.highlightItem(item)
+            this.$emit('selected', item)
+          })
+          .catch(err => {
+            console.error(err)
+            return
+          })
 
-        this.showDialog = true
-
-        this.$emit('selected', item)
       },
 
       highlightItem(selected) {
