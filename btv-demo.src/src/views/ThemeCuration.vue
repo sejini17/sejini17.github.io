@@ -72,7 +72,7 @@
       },
 
       searchRelate(itemId) {
-        console.log("searchRelate : " + itemId)
+        console.log("searchRelate : ", itemId)
         this.$axios.get('/test-data/relate.json')
           .then(res => {
             this.subItems = res.data.items

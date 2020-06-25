@@ -203,7 +203,7 @@
         this.selectedItem = item
         if (!this.selectedItem)
           return
-        console.log("showDetail : " + item.id)
+        console.log("showDetail : ", item.id)
 
         this.selectedItem = {
           id: item.id,
@@ -222,7 +222,6 @@
         for (let item of this.items) 
         {
           item.blur = true
-// console.log("highlightItem : " + item.id)
         }
         selected.blur = false
       },

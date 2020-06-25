@@ -174,8 +174,7 @@
         this.selectedItem = null
       },
       showDetail(item) {
-        console.log('selected : ')
-        console.log(item)
+        console.log('selected : ', item)
 
         if (!item) return
 

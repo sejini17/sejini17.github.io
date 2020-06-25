@@ -119,7 +119,7 @@
           this.resetSearch()
           return
         }
-        console.log('searchKeyword : ' + this.searchText)
+        console.log('searchKeyword : ', this.searchText)
         this.$eventBus.$emit('searchKeyword', this.searchText)
       },
     },
