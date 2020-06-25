@@ -28,7 +28,9 @@
 
     <!-- content -------------------------------------------------------->
     <v-main class="pa-0 ma-0">
-      <v-container fill-height fluid
+      <v-container 
+        fill-height 
+        fluid
         pa-0 ma-0
         justify-center
         align-content-start
