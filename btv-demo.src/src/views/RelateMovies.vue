@@ -1,8 +1,8 @@
 <template>
       <v-container pa-0 ma-0
       >
-        <v-row>
-          <v-col>
+        <v-layout >
+          <v-flex >
             <!-- first result list -->
             <movie-list2 :items="topItems" :header="headerTop" ref="topList"
               @selected="searchRelate"
@@ -10,8 +10,9 @@
             
             <!-- second result list -->
             <movie-list2 :items="randItems" :header="headerRand" ref="secList"
+              :refreshable="true" :showArrows="false"
               @selected="searchRelate"
-              refreshable="true" @reqRefresh="refreshRand"
+              @reqRefresh="refreshRand"
             />
             
             <!-- 연관 영화 목록
@@ -19,8 +20,8 @@
             <movie-grid  v-if="relateItems.length"
               :items="relateItems" :header="headerReleate"
             />
-          </v-col>
-        </v-row>
+          </v-flex>
+        </v-layout>
       </v-container>
 </template>
 
@@ -34,7 +35,8 @@
     arr = JSON.parse(JSON.stringify( arr ))
 
     let result = []
-    for (var i = 0; i < size; i++) {
+    let randSize = size < arr.length ? size : arr.length
+    for (var i = 0; i < randSize; i++) {
       let randIdx = getRandomInt(0, arr.length-1)
       result.push(arr[randIdx])
       arr.splice(randIdx, 1)
@@ -42,7 +44,7 @@
     return result
   }
 
-  let randomSize = 10
+  let randomSize = 12
   let realateSize = 12 * 5  //grid로 표현되므로 12의 배수가 적당
 
   // @ is an alias to /src
@@ -65,8 +67,8 @@
       relateItems: [],
 
       headerTop: '',
-      headerRand: '',
-      headerReleate: ''
+      headerRand: 'Random Pick',
+      headerReleate: '추천 영화 콘텐츠'
     }),
 
     created () {
@@ -84,15 +86,16 @@
         //top100 list
         this.$axios.get('/test-data/top100.json')
           .then(res => {
-            this.topItems = res.data
+            this.topItems = res.data.filter(item => {
+              // if (item.catchon_flag == '99') console.log(item.series_id)
+              return item.catchon_flag != '99'
+            })
             //random list
             this.refreshRand()
           })
         this.relateItems = []
 
         this.headerTop = 'Top Pick'
-        this.headerRand = 'Random Pick'
-        this.headerReleate = '유사 영화 콘텐츠'
       },
       refreshRand() {
         this.randItems = getRandomItem(this.topItems, randomSize)
@@ -125,9 +128,8 @@
       },
 
       searchRelate(item) {
-
+// if (item) return
 // console.log(item)
-
         this.$axios.post(
           // 'http://localhost:8857'+
           // 'http://172.27.98.159:8857'+
@@ -145,7 +147,7 @@
             // .sort( //정렬순서는 서버에서 하는걸로. 2020-0619
             //   (a, b) => a.dist - b.dist // 오름차순
             // );
-            this.headerReleate = '유사 영화 콘텐츠'
+            // this.headerReleate = '추천 영화 콘텐츠'
           })
           .catch(err => {
             console.error(err)

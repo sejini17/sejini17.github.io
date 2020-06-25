@@ -10,72 +10,68 @@
         <v-sheet 
           class="mx-auto"
         >
-            <v-container fluid>
+          <v-container fluid>
             <v-row>
                 <v-col
                     class="d-flex child-flex"
                     xs-12 md-4 xl-2
-                    align-start
-                    justify-start
+                    align-center
+                    justify-center
 
-                    v-for="item in items"
-                    :key="item.series_id" 
+                    v-for="(item, i) in items"
+                    :key="item.series_id + i" 
                 >
                 <!-- {{item.img ? item.img : urlImg + item.thumbnail}} 
-    height="156"
-    width="115"
                 -->
 <v-card
-        :aspect-ratio="115/156"
-        width="115"
-        height="156"
-    class="ma-4 "
+      :aspect-ratio="115/156"
+      max-width="115"
+      height="156"
+  class="ma-4 "
 
-    ripple
-    align-center justify-center
-    flat tile
-    >
-    <v-img
-        :src="item.img ? item.img : urlImg + item.thumbnail"
-        @click="showDetail(item)"
+  ripple
+  align-center justify-center
+  flat tile
+  >
+  <v-img
+    :src="item.img ? item.img : urlImg + item.thumbnail"
+    @click="showDetail(item)"
 
-        max-width="115"
-        max-height="156"
-    >
-        <template v-slot:placeholder>
-          <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-          >
-              <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-          </v-row>
-        </template>
-    </v-img>
+    max-width="115"
+    max-height="156"
+  >
+    <template v-slot:placeholder>
+      <v-row
+          class="fill-height ma-0"
+          align="center"
+          justify="center"
+      >
+          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+      </v-row>
+    </template>
+  </v-img>
 
-    <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
-    <!-- 
-        <v-card-title>{{ item.title }}</v-card-title>
-    <v-card-text class="text--primary">
-        <div>{{item.src}}</div>
-    </v-card-text> 
+  <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
+  <!-- 
+      <v-card-title>{{ item.title }}</v-card-title>
+  <v-card-text class="text--primary">
+      <div>{{item.src}}</div>
+  </v-card-text> 
 
-    <v-card-actions>
-        <v-btn color="orange" text >
-        상세보기
-        </v-btn>
-        <v-btn color="orange" text >
-        관련영화
-        </v-btn>
-    </v-card-actions>
-    -->
+  <v-card-actions>
+      <v-btn color="orange" text >
+      상세보기
+      </v-btn>
+      <v-btn color="orange" text >
+      관련영화
+      </v-btn>
+  </v-card-actions>
+  -->
 </v-card>
                 </v-col>
             </v-row>
-            </v-container>
+          </v-container>
         </v-sheet>
-
-
 
       </v-col>
     </v-row>

@@ -1,11 +1,10 @@
 <template>
   <v-container pa-0 ma-0>
         
-    <v-row>
+    <v-row no-gutters dense>
       <v-col>
 
-                 
-        <v-subheader>
+        <v-subheader >
           {{ header }}
           <v-btn color="green" icon @click="refresh()" v-if="refreshable" >
             <v-icon>mdi-cached</v-icon>
@@ -15,17 +14,18 @@
         <v-btn color="orange" icon  >
           <v-icon>mdi-cached</v-icon>
         </v-btn> 
+            <v-sheet :max-width="selectedItem ? 900 : ''"
 -->
-        <v-row>
+        <v-row no-gutters dense>
           <v-col>
-            <v-sheet :max-width="selectedItem ? 600 : ''"
+            <v-sheet 
             >
               <!-- slide ----------------------------------------------------------->
               <v-slide-group v-if="items"
                 v-model="slideModel"
                 class="pa-4" 
                 center-active
-                show-arrows
+                :show-arrows="showArrows"
               >
                 <v-slide-item
                   v-for="item in items"
@@ -37,7 +37,7 @@
                     @click="toggle"
                     height="156"
                     width="115"
-                    class="ma-4"
+                    class="ma-4 pa-1"
 
                     ripple
                     :raised="!item.blur"
@@ -66,8 +66,35 @@
 
             
           </v-col>
-          <v-col v-if="selectedItem">
-            <v-card>
+        </v-row>
+        <v-row v-if="slideModel != null && selectedItem"
+          
+          dense>
+          <v-col>
+<!--             
+            <v-card
+              height="156"
+              width="115"
+              class="ma-4"
+
+              align-center justify-center
+            >
+            </v-card> 
+            -->
+
+            <v-card ma-0 pa-0>
+              <v-expansion-panels>
+              <v-expansion-panel
+              >
+                <v-expansion-panel-header>상세정보 : {{selectedItem.title_display}}</v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <MovieDetail :item="selectedItem" 
+                  />
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+              </v-expansion-panels>
+<!-- 
+
               <v-toolbar >
                 <v-toolbar-title>{{selectedItem.title_display}}</v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -75,11 +102,29 @@
                   <v-icon>mdi-close</v-icon>
                 </v-btn> 
               </v-toolbar>
-              
               <v-card-text>
                 <MovieDetail :item="selectedItem" 
                 />
               </v-card-text>
+
+              <v-img
+                height="156"
+                width="115"
+                class="ma-4"
+                :src="selectedItem.img ? selectedItem.img : urlImg + selectedItem.thumbnail"
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                  </v-row>
+                </template> 
+              </v-img> 
+-->
+              
             </v-card>
           </v-col>
         </v-row>
@@ -99,15 +144,19 @@
       MovieDetail
     },
 
-    // props: {
-    //   pageSize: Number,
-    // },
-    props: [
-      'header',
-      'items',
+    props: {
+      'header' : String,
+      'items' : {
+        required: true
+      },
 
-      'refreshable',
-    ],
+      'refreshable' : Boolean,
+
+      'showArrows': {
+        type: Boolean,
+        default: true
+      },
+    },
     data: () => ({
       selectedItem: null,
 
@@ -121,7 +170,7 @@
 
     methods: {
       reset() {
-        this.slideModel = 0
+        this.slideModel = null
         this.selectedItem = null
       },
       showDetail(item) {
@@ -138,6 +187,8 @@
         this.selectedItem = null
       },
       refresh() {
+        this.reset()
+        this.slideModel = null
         this.$emit('reqRefresh')
       }
     },
