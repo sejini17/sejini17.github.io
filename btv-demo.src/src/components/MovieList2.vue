@@ -21,14 +21,14 @@
             <v-sheet 
             >
               <!-- slide ----------------------------------------------------------->
-              <v-slide-group v-if="items"
+              <v-slide-group v-if="contentItems"
                 v-model="slideModel"
                 class="pa-4" 
                 center-active
                 :show-arrows="showArrows"
               >
                 <v-slide-item
-                  v-for="item in items"
+                  v-for="item in contentItems"
                   :key="item.series_id" 
                   v-slot:default="{ active, toggle }"
                 >
@@ -136,6 +136,7 @@
 </template>
 
 <script>
+  import apiBtv from '@/api/vod-btv-api'
   import MovieDetail from '@/components/MovieDetail';
 
   export default {
@@ -156,6 +157,7 @@
         type: Boolean,
         default: true
       },
+      'theme' : String,
     },
     data: () => ({
       selectedItem: null,
@@ -164,21 +166,55 @@
       slideModel: null
     }),
 
-    computed: { },
-    created () { },
+    computed: { 
+      contentItems : function() {
+        // return this.getItems()
+        return this.items
+      }
+    },
+    created () { 
+      if (this.theme) {
+        this.$axios.post(
+          '/vod/btv/api/v1.0/theme-search', 
+          {
+            'query' : this.theme,
+            'topn' : 10
+          }
+        )
+        .then(res => {
+          //TODO prop을 직접 수정하면 안됨
+          this.items = res.data
+        })
+      }
+    },
     mounted() { },
 
     methods: {
+      async getItems() {
+        if (this.theme) {
+          let res = await this.$axios.get('/test-data/top100.json')
+          console.log('statusText : ', res.statusText)
+          return res.data
+          
+            // .then(res => {
+            //   this.items = res.data
+            // })
+        }
+        return this.items
+      },
+
       reset() {
         this.slideModel = null
         this.selectedItem = null
       },
-      showDetail(item) {
+      async showDetail(item) {
         console.log('selected : ', item)
 
         if (!item) return
 
-        this.selectedItem = item
+        // this.selectedItem = item
+        //api에서 상세정보 가져오기 추가처리
+        this.selectedItem = await apiBtv.getMetaById(item.series_id)
 
         this.$emit('selected', item)
       },

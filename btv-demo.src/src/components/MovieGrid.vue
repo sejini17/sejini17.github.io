@@ -10,7 +10,9 @@
         <v-sheet 
           class="mx-auto"
         >
-          <v-container fluid>
+          <v-container fluid
+            pa-0 ma-0
+          >
             <v-row>
                 <v-col
                     class="d-flex child-flex"
@@ -21,39 +23,64 @@
                     v-for="(item, i) in items"
                     :key="item.series_id + i" 
                 >
-                <!-- {{item.img ? item.img : urlImg + item.thumbnail}} 
-                -->
+<!-- 
+  height="156"
+  :aspect-ratio="115/156"
+  ripple
+-->
 <v-card
-      :aspect-ratio="115/156"
-      max-width="115"
-      height="156"
+  max-width="115"
   class="ma-4 "
 
-  ripple
   align-center justify-center
   flat tile
   >
-  <v-img
-    :src="item.img ? item.img : urlImg + item.thumbnail"
-    @click="showDetail(item)"
-
-    max-width="115"
-    max-height="156"
+  
+  <v-container 
+    pa-0 ma-0
+    justify-start align-start
   >
-    <template v-slot:placeholder>
-      <v-row
+    <v-img
+      :src="item.img ? item.img : urlImg + item.thumbnail"
+      @click="showDetail(item)"
+
+      max-width="115"
+      max-height="156"
+    >
+      <template v-slot:placeholder>
+        <v-row
           class="fill-height ma-0"
           align="center"
           justify="center"
-      >
+        >
           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-      </v-row>
-    </template>
-  </v-img>
+        </v-row>
+      </template>
+      
+      <v-layout fill-height
+        justify-end align-end
+      >
+        <v-fab-transition>
+          <v-btn class="v-btn-search"
+            fab small
+            right bottom
+            @click="searchThis(item)"
+          >
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+        </v-fab-transition>
+      </v-layout>
 
-  <!-- <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> -->
-  <!-- 
-      <v-card-title>{{ item.title }}</v-card-title>
+    </v-img>
+  </v-container>
+
+  <v-card-text>
+    {{item.kb_kmdb_keyword}} #tag1 #tag2
+  </v-card-text> 
+<!-- 
+  <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> 
+  <v-card-title>{{ item.title }}</v-card-title>
+
   <v-card-text class="text--primary">
       <div>{{item.src}}</div>
   </v-card-text> 
@@ -66,7 +93,7 @@
       관련영화
       </v-btn>
   </v-card-actions>
-  -->
+-->
 </v-card>
                 </v-col>
             </v-row>
@@ -116,6 +143,7 @@
 </template>
 
 <script>
+  import apiBtv from '@/api/vod-btv-api'
   import MovieDetail from '@/components/MovieDetail';
 
   export default {
@@ -144,36 +172,17 @@
       reset() {
         this.selectedItem = null
       },
-      showDetail(item) {
+      async showDetail(item) {
         this.reset()
 
-        this.$axios.post(
-          '/vod/btv/api/v1.0/meta-id-search', 
-          {
-            'query' : item.series_id,
-            'topn' : 1
-          }
-        )
-          .then(res => {
-            this.selectedItem  = res.data.response.documents[0]
-            this.selectedItem.kmdb_kwd_refine = item.kmdb_kwd_refine
-            this.selectedItem.kmdb_kwd = item.kmdb_kwd
-
-            if (!this.selectedItem)
-                return
-            console.log('showDetail : ' + item.series_id)
-
-            // this.highlightItem(item)
-
-            this.showDialog = true
-
-            this.$emit('selected', item)
-          })
-          .catch(err => {
-            console.error(err)
+        this.selectedItem = await apiBtv.getMetaById(item.series_id)
+        if (!this.selectedItem)
             return
-          })
+        console.log('showDetail : ', item.series_id)
 
+        // this.highlightItem(item)
+        this.showDialog = true
+        this.$emit('selected', item)
       },
 
       highlightItem(selected) {
@@ -183,6 +192,19 @@
         selected.blur = false
       },
 
+      searchThis(selected) {
+        console.log('searchThis : ', selected)
+        this.$emit('searchThis', selected.title)
+      }
+
     },
   }
 </script>
+<style>
+  /* This is for documentation purposes and will not be needed in your application */
+  #lateral .v-btn-search {
+    bottom: 0;
+    position: absolute;
+    margin: 0 0 16px 16px;
+  }
+</style>
