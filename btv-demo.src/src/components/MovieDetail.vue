@@ -61,8 +61,8 @@
       <v-col cols=4
       >
 
-        <template v-if="item.kmdb_kwd_refine && item.kmdb_kwd_refine.length">
-          <v-chip v-for="(value, i) in item.kmdb_kwd_refine.slice(0, keywordSize)" :key="value+i"
+        <template v-if="item.kwd_refine && item.kwd_refine.length">
+          <v-chip v-for="(value, i) in item.kwd_refine.slice(0, keywordSize)" :key="value+i"
                   class="pa-2 ma-1"
           >{{value}}
           </v-chip>
