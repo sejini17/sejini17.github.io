@@ -19,6 +19,7 @@
              -->
             <movie-grid  v-if="relateItems.length"
               :items="relateItems" :header="headerReleate"
+              @searchThis="searchKeyword"
             />
           </v-flex>
         </v-layout>
@@ -42,6 +43,15 @@
       arr.splice(randIdx, 1)
     }
     return result
+  }
+  function filterCatchon(arr) {
+    return arr instanceof Array ? 
+      arr.filter(item => {
+        if (item.catchon_flag == '99') 
+          console.debug("item.catchon_flag == '99' : ", item.series_id)
+        return item.catchon_flag != '99'
+      })
+      : []
   }
 
   let randomSize = 12
@@ -72,7 +82,9 @@
     }),
 
     created () {
-      this.$eventBus.$on('searchKeyword', (value) => this.searchKeyword(value))
+      this.$eventBus.$on('searchKeyword', 
+        (value) => this.searchKeyword(value)
+      )
     },
     mounted() {
       this.resetSearch()
@@ -86,10 +98,7 @@
         //top100 list
         this.$axios.get('/test-data/top100.json')
           .then(res => {
-            this.topItems = res.data.filter(item => {
-              // if (item.catchon_flag == '99') console.log(item.series_id)
-              return item.catchon_flag != '99'
-            })
+            this.topItems = filterCatchon(res.data)
             //random list
             this.refreshRand()
           })
@@ -102,8 +111,8 @@
       },
 
       searchKeyword(searchText) {
-        this.$refs.topList.reset()
-        this.$refs.secList.reset()
+        if (this.$refs.topList)
+          this.$refs.topList.reset()
 
         if (!searchText) {
           this.resetSearch()
@@ -119,7 +128,7 @@
         )
         // this.$axios.get('/test-data/search_result.json')
           .then(res => {
-            this.topItems = res.data.response.documents
+            this.topItems = filterCatchon(res.data.response.documents)
             this.headerTop = '검색 결과'
           })
           .catch(err => {
@@ -143,7 +152,7 @@
         // this.$axios.get('https://sejini17.github.io/test-data/test_result.json')
 
           .then(res => {
-            this.relateItems = res.data.response.sim_contents
+            this.relateItems = filterCatchon(res.data.response.sim_contents)
             // .sort( //정렬순서는 서버에서 하는걸로. 2020-0619
             //   (a, b) => a.dist - b.dist // 오름차순
             // );
