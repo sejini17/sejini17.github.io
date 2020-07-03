@@ -154,10 +154,10 @@
       'refreshable' : Boolean,
 
       'showArrows': {
-        type: Boolean,
-        default: true
+        default: 'mobile'
       },
       'theme' : String,
+      'index' : Number,
     },
     data: () => ({
       selectedItem: null,
@@ -174,17 +174,20 @@
     },
     created () { 
       if (this.theme) {
-        this.$axios.post(
-          '/vod/btv/api/v1.0/theme-search', 
-          {
-            'query' : this.theme,
-            'topn' : 10
-          }
-        )
-        .then(res => {
-          //TODO prop을 직접 수정하면 안됨
-          this.items = res.data
-        })
+        console.log(this.theme, this.index)
+        setTimeout(() => {
+          this.$axios.post(
+            '/vod/btv/api/v1.0/theme-search', 
+            {
+              'query' : this.theme,
+              'topn' : 10
+            }
+          )
+          .then(res => {
+            //TODO prop을 직접 수정하면 안됨
+            this.items = res.data
+          })
+        }, this.index * 500)
       }
     },
     mounted() { },

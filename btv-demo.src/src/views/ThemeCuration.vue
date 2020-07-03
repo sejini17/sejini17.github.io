@@ -6,9 +6,9 @@
         <!-- 
         ref="topList" @selected="searchRelate"
         -->
-        <template v-for="theme in themes">
+        <template v-for="(theme, i) in themes">
           <movie-list2 :items="topItems" :header="theme" :key="theme"
-            :theme="theme"
+            :theme="theme" :index="i"
           />
         </template>
 
@@ -89,7 +89,7 @@
 투자가치 200%의 주식 영화
 `.split('\n').filter(l => l.length != 0)
 //debug용
-// .slice(-1)
+// .slice(-3)
       },
 
       searchKeyword(searchText) {
