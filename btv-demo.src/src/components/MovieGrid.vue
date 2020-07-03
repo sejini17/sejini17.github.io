@@ -30,7 +30,7 @@
 -->
 <v-card
   max-width="115"
-  class="ma-4 "
+  class="ms-4 "
 
   align-center justify-center
   flat tile
@@ -44,8 +44,8 @@
       :src="item.img ? item.img : urlImg + item.thumbnail"
       @click="showDetail(item)"
 
-      max-width="115"
-      max-height="156"
+      width="115"
+      height="156"
     >
       <template v-slot:placeholder>
         <v-row
@@ -53,7 +53,15 @@
           align="center"
           justify="center"
         >
-          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+          <!-- 아래꺼랑 바꿀수도 있음
+          <v-skeleton-loader
+              type="card"
+              class="mx-auto"
+              width="115"
+              height="156"
+            ></v-skeleton-loader>
+          -->
+          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular> 
         </v-row>
       </template>
       
@@ -74,9 +82,17 @@
     </v-img>
   </v-container>
 
-  <v-card-text>
-    {{item.kb_kmdb_keyword}} #tag1 #tag2
+  <v-card-text v-if="item.rep_kwd && item.rep_kwd.length > 0"
+              class="pa-0 ma-0"
+  >
+      <v-chip v-for="(tag, i) in item.rep_kwd" :key="tag+i"
+              class="pa-1 mt-1 mr-1"
+      >{{tag}}
+      </v-chip>
   </v-card-text> 
+
+  <transition>
+  </transition>
 <!-- 
   <v-card-subtitle class="pb-0">Number 10</v-card-subtitle> 
   <v-card-title>{{ item.title }}</v-card-title>
