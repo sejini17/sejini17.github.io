@@ -36,7 +36,7 @@
     },
     data: () => ({
       topItems: [],
-      headerTop: 'test',
+      headerTop: '',
       themes: []
     }),
 
@@ -88,14 +88,10 @@
 가슴이 뜨거워지는 전쟁 영화
 투자가치 200%의 주식 영화
 `.split('\n').filter(l => l.length != 0)
-//debug용
-// .slice(-3)
+// .slice(-3) //debug용
       },
 
       searchKeyword(searchText) {
-        // if (this.$refs.topList)
-        //   this.$refs.topList.reset()
-
         if (!searchText) {
           this.resetSearch()
           return

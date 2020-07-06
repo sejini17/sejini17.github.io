@@ -5,9 +5,6 @@
       <v-col>
         <v-subheader >
           {{ header }}
-          <v-btn color="green" icon @click="refresh()" v-if="refreshable" >
-            <v-icon>mdi-cached</v-icon>
-          </v-btn> 
         </v-subheader>
 <!--         
         <v-btn color="orange" icon  >
@@ -20,14 +17,14 @@
             <v-sheet 
             >
               <!-- slide ----------------------------------------------------------->
-              <v-slide-group v-if="contentItems"
+              <v-slide-group v-if="items"
                 v-model="slideModel"
                 class="pa-4" 
                 center-active
                 :show-arrows="showArrows"
               >
                 <v-slide-item
-                  v-for="item in contentItems"
+                  v-for="item in items"
                   :key="item.series_id" 
                   v-slot:default="{ active, toggle }"
                 >
@@ -146,19 +143,15 @@
 
     props: {
       'header' : String,
-      'items' : {
-        required: true
-      },
-
-      'refreshable' : Boolean,
-
       'showArrows': {
         default: 'mobile'
       },
+
       'theme' : String,
       'index' : Number,
     },
     data: () => ({
+      items: [],
       selectedItem: null,
 
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
@@ -166,13 +159,10 @@
     }),
 
     computed: { 
-      contentItems : function() {
-        return this.items
-      }
     },
     created () { 
       if (this.theme) {
-        console.log(this.theme, this.index)
+        console.log(this.index, this.theme)
         setTimeout(() => {
           this.$axios.post(
             '/vod/btv/api/v1.0/theme-search', 
@@ -182,7 +172,6 @@
             }
           )
           .then(res => {
-            //TODO prop을 직접 수정하면 안됨
             this.items = res.data
           })
         }, this.index * 500)
@@ -207,10 +196,6 @@
         this.slideModel = null
         this.selectedItem = null
       },
-      refresh() {
-        this.reset()
-        this.$emit('reqRefresh')
-      }
     },
   }
 </script>
