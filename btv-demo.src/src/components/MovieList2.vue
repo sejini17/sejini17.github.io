@@ -3,7 +3,6 @@
         
     <v-row no-gutters dense>
       <v-col>
-
         <v-subheader >
           {{ header }}
           <v-btn color="green" icon @click="refresh()" v-if="refreshable" >
@@ -168,7 +167,6 @@
 
     computed: { 
       contentItems : function() {
-        // return this.getItems()
         return this.items
       }
     },
@@ -193,23 +191,6 @@
     mounted() { },
 
     methods: {
-      async getItems() {
-        if (this.theme) {
-          let res = await this.$axios.get('/test-data/top100.json')
-          console.log('statusText : ', res.statusText)
-          return res.data
-          
-            // .then(res => {
-            //   this.items = res.data
-            // })
-        }
-        return this.items
-      },
-
-      reset() {
-        this.slideModel = null
-        this.selectedItem = null
-      },
       async showDetail(item) {
         console.log('selected : ', item)
 
@@ -221,12 +202,13 @@
 
         this.$emit('selected', item)
       },
-      unselect() {
+
+      reset() {
+        this.slideModel = null
         this.selectedItem = null
       },
       refresh() {
         this.reset()
-        this.slideModel = null
         this.$emit('reqRefresh')
       }
     },
