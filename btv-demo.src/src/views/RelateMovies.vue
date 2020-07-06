@@ -4,19 +4,12 @@
         <v-layout >
           <v-flex >
             <!-- first result list -->
-            <movie-list2 :items="topItems" :header="headerTop" ref="topList"
+            <movie-list :items="topItems" :header="headerTop" ref="topList"
               @selected="searchRelate"
+              @reqRefresh="refreshRand" @reqReInit="resetSearch"
             />
             
-            <!-- second result list -->
-            <movie-list2 :items="randItems" :header="headerRand" ref="secList"
-              :refreshable="true" :showArrows="false"
-              @selected="searchRelate"
-              @reqRefresh="refreshRand"
-            />
-            
-            <!-- 연관 영화 목록
-             -->
+            <!-- 연관 영화 목록 -->
             <movie-grid  v-if="relateItems.length"
               :items="relateItems" :header="headerReleate"
               @searchThis="searchKeyword"
@@ -25,8 +18,6 @@
         </v-layout>
       </v-container>
 </template>
-
-
 <script>
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -36,7 +27,7 @@
     arr = JSON.parse(JSON.stringify( arr ))
 
     let result = []
-    let randSize = size < arr.length ? size : arr.length
+    let randSize = !size || size > arr.length ? arr.length: size
     for (var i = 0; i < randSize; i++) {
       let randIdx = getRandomInt(0, arr.length-1)
       result.push(arr[randIdx])
@@ -54,17 +45,16 @@
       : []
   }
 
-  let randomSize = 12
   let realateSize = 12 * 5  //grid로 표현되므로 12의 배수가 적당
 
   // @ is an alias to /src
-  import MovieList2 from '@/components/MovieList2';
+  import MovieList from '@/components/MovieList';
   import MovieGrid from '@/components/MovieGrid';
 
   export default {
     name: 'RelateMovie',
     components: {
-      MovieList2,
+      MovieList,
       MovieGrid
     },
 
@@ -100,14 +90,14 @@
           .then(res => {
             this.topItems = filterCatchon(res.data)
             //random list
-            this.refreshRand()
+            // this.refreshRand()
           })
         this.relateItems = []
 
         this.headerTop = 'Top Pick'
       },
       refreshRand() {
-        this.randItems = getRandomItem(this.topItems, randomSize)
+        this.topItems = getRandomItem(this.topItems)
       },
 
       searchKeyword(searchText) {
@@ -126,7 +116,6 @@
             'topn' : realateSize
           }
         )
-        // this.$axios.get('/test-data/search_result.json')
           .then(res => {
             this.topItems = filterCatchon(res.data.response.documents)
             this.headerTop = '검색 결과'
@@ -148,8 +137,6 @@
             'topn' : realateSize
           }
         )
-        
-        // this.$axios.get('https://sejini17.github.io/test-data/test_result.json')
 
           .then(res => {
             this.relateItems = filterCatchon(res.data.response.sim_contents)
