@@ -4,14 +4,15 @@
         <v-layout >
           <v-flex >
             <!-- first result list -->
-            <movie-list :items="topItems" :header="headerTop" ref="topList"
+            <movie-list ref="topList"
+              :items="topItems" :header="headerTop" 
               @selected="searchRelate"
               @reqRefresh="refreshRand" @reqReInit="resetSearch"
             />
             
             <!-- 연관 영화 목록 -->
-            <movie-grid  v-if="relateItems.length"
-              :items="relateItems" :header="headerReleate"
+            <movie-grid  v-if="selectedPickItem"
+              :pickItem="selectedPickItem" :itemSize="relateSize"
               @searchThis="searchKeyword"
             />
           </v-flex>
@@ -45,8 +46,6 @@
       : []
   }
 
-  let realateSize = 12 * 5  //grid로 표현되므로 12의 배수가 적당
-
   // @ is an alias to /src
   import MovieList from '@/components/MovieList';
   import MovieGrid from '@/components/MovieGrid';
@@ -59,16 +58,13 @@
     },
 
     props: {
-      searchText: String,
     },
     data: () => ({
       topItems: [],
-      randItems: [],
-      relateItems: [],
-
       headerTop: '',
-      headerRand: 'Random Pick',
-      headerReleate: '추천 영화 콘텐츠'
+
+      selectedPickItem: null,
+      relateSize: 12 * 5,  //grid로 표현되므로 12의 배수가 적당
     }),
 
     created () {
@@ -80,19 +76,12 @@
       this.resetSearch()
     },
     methods: {
-      resetValidation () {
-        this.$refs.form.resetValidation()
-      },
-
       resetSearch() {
         //top100 list
         this.$axios.get('/test-data/top100.json')
           .then(res => {
             this.topItems = filterCatchon(res.data)
-            //random list
-            // this.refreshRand()
           })
-        this.relateItems = []
 
         this.headerTop = 'Top Pick'
       },
@@ -113,7 +102,7 @@
           '/vod/btv/api/v1.0/meta-text-search', 
           {
             'query' : searchText,
-            'topn' : realateSize
+            'topn' : this.relateSize
           }
         )
           .then(res => {
@@ -126,28 +115,8 @@
       },
 
       searchRelate(item) {
-// if (item) return
-// console.log(item)
-        this.$axios.post(
-          // 'http://localhost:8857'+
-          // 'http://172.27.98.159:8857'+
-          '/vod/btv/api/v1.0/sim_content', 
-          {
-            's_id' : item.series_id,
-            'topn' : realateSize
-          }
-        )
-
-          .then(res => {
-            this.relateItems = filterCatchon(res.data.response.sim_contents)
-            // .sort( //정렬순서는 서버에서 하는걸로. 2020-0619
-            //   (a, b) => a.dist - b.dist // 오름차순
-            // );
-            // this.headerReleate = '추천 영화 콘텐츠'
-          })
-          .catch(err => {
-            console.error(err)
-          })
+        //MovieGrid로 표시
+        this.selectedPickItem = item
       },
     },
   }

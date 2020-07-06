@@ -5,7 +5,11 @@
     <v-row>
       <v-col>
 
-        <v-subheader >{{ header }}</v-subheader>
+        <v-subheader >
+          <v-icon class="mr-1">mdi-thumb-up</v-icon>
+          추천 영화 콘텐츠
+          <v-switch v-model="isRand" class="ml-2" label="Random"></v-switch>
+        </v-subheader>
 
         <v-sheet 
           class="mx-auto"
@@ -17,8 +21,6 @@
                 <v-col
                     class="d-flex child-flex"
                     xs-12 md-4 xl-2
-                    align-center
-                    justify-center
 
                     v-for="(item, i) in items"
                     :key="item.series_id + i" 
@@ -31,8 +33,6 @@
 <v-card
   max-width="115"
   class="ms-4 "
-
-  align-center justify-center
   flat tile
   >
   
@@ -159,6 +159,17 @@
 </template>
 
 <script>
+  function filterCatchon(arr) {
+    return arr instanceof Array ? 
+      arr.filter(item => {
+        if (item.catchon_flag == '99') 
+          console.debug("item.catchon_flag == '99' : ", item.series_id)
+        return item.catchon_flag != '99'
+      })
+      : []
+  }
+
+
   import apiBtv from '@/api/vod-btv-api'
   import MovieDetail from '@/components/MovieDetail';
 
@@ -169,25 +180,58 @@
     },
 
     props: [
-      'header',
-      'items',
+      'pickItem',
+      'itemSize',
     ],
     data: () => ({
+      items: null,
       selectedItem: null,
       showDialog: false,
 
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
+      isRand: false
     }),
 
     computed: { },
-    watch: { },
+    watch: { 
+      pickItem: function() {
+        this.searchSimContent()
+      },
+      isRand: function() {
+        this.searchSimContent()
+      },
+    },
     created () { },
-    mounted() { },
+    mounted() { 
+      this.searchSimContent()
+    },
 
     methods: {
       reset() {
         this.selectedItem = null
       },
+
+      searchSimContent() {
+        this.$axios.post(
+          '/vod/btv/api/v1.0/sim_content', 
+          {
+            's_id': this.pickItem.series_id,
+            'topn': this.itemSize,
+            'rand': this.isRand
+          }
+        )
+          .then(res => {
+            this.items = filterCatchon(res.data.response.sim_contents)
+            // .sort( //정렬순서는 서버에서 하는걸로. 2020-0619
+            //   (a, b) => a.dist - b.dist // 오름차순
+            // );
+            // this.headerReleate = '추천 영화 콘텐츠'
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      },
+
       async showDetail(item) {
         this.reset()
 
@@ -196,16 +240,8 @@
             return
         console.log('showDetail : ', item.series_id)
 
-        // this.highlightItem(item)
         this.showDialog = true
         this.$emit('selected', item)
-      },
-
-      highlightItem(selected) {
-        for (let item of this.items) 
-          item.blur = true
-
-        selected.blur = false
       },
 
       searchThis(selected) {
