@@ -13,6 +13,9 @@ Vue.prototype.$eventBus = new Vue(); // 이벤트 버스
 
 Vue.use(vueMoment)
 
+import BtnScrollToTop from '@/components/BtnScrollToTop';
+Vue.component('BtnScrollToTop', BtnScrollToTop)
+
 Vue.config.productionTip = false
 
 new Vue({

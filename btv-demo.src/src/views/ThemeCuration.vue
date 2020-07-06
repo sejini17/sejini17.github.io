@@ -12,7 +12,7 @@
           />
         </template>
 
-        <BtnScrollToTop v-if="false"/>
+        <BtnScrollToTop />
 
       </v-flex>
     </v-layout>
@@ -22,13 +22,11 @@
 
 <script>
   import MovieList2 from '@/components/MovieList2';
-  import BtnScrollToTop from '@/components/BtnScrollToTop';
 
   export default {
     name: 'ThemeCuration',
     components: {
       MovieList2,
-      BtnScrollToTop
     },
 
     props: {

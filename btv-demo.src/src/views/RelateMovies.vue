@@ -16,6 +16,8 @@
           @searchThis="searchKeyword"
         />
 
+        <BtnScrollToTop />
+
         <v-snackbar
           v-model="snackBar"
           top
@@ -74,7 +76,7 @@
     name: 'RelateMovie',
     components: {
       MovieList,
-      MovieGrid
+      MovieGrid,
     },
 
     props: {
@@ -138,6 +140,7 @@
               this.$refs.topList.reset()
             this.headerTop = '검색 결과'
             this.topItems = result
+            this.$vuetify.goTo(0)
           })
           .catch(err => {
             console.error(err)
