@@ -3,11 +3,6 @@
         
     <v-row no-gutters dense>
       <v-col>
-<!--
-          <v-btn color="green" icon @click="refresh()" v-if="refreshable" >
-            <v-icon>mdi-cached</v-icon>
-          </v-btn> 
--->
         <v-subheader >
           <v-icon class="mr-1">mdi-movie-search</v-icon>
           {{ header }}
@@ -22,18 +17,21 @@
               @click="reInit()"
             >
               <span class="hidden-sm-and-down">Ordered</span>
-
               <v-icon right>mdi-shuffle-disabled</v-icon>
             </v-btn>
 
             <v-btn value="true"
               @click="refresh()"
             >
-              <span class="hidden-sm-and-down">Random</span>
-
+              <span class="hidden-sm-and-down">Shuffle</span>
               <v-icon right>mdi-shuffle</v-icon>
             </v-btn>
           </v-btn-toggle>
+<!--
+          <v-btn color="green" icon @click="refresh()" v-if="refreshable" >
+            <v-icon>mdi-cached</v-icon>
+          </v-btn> 
+-->
         </v-subheader>
 
         <v-row no-gutters dense>
@@ -41,14 +39,14 @@
             <v-sheet 
             >
               <!-- slide ----------------------------------------------------------->
-              <v-slide-group v-if="contentItems"
+              <v-slide-group v-if="items"
                 v-model="slideModel"
                 class="pa-4" 
                 center-active
                 :show-arrows="showArrows"
               >
                 <v-slide-item
-                  v-for="item in contentItems"
+                  v-for="item in items"
                   :key="item.series_id" 
                   v-slot:default="{ active, toggle }"
                 >
@@ -60,7 +58,6 @@
                     class="ma-4 pa-1"
 
                     ripple
-                    :raised="!item.blur"
                     align-center justify-center
                   >
                     <v-img
@@ -76,8 +73,8 @@
             
           </v-col>
         </v-row>
+
         <v-row v-if="slideModel != null && selectedItem"
-          
           dense>
           <v-col>
 
@@ -119,13 +116,9 @@
         required: true
       },
 
-      'refreshable' : Boolean,
-
       'showArrows': {
         default: 'mobile'
       },
-      'theme' : String,
-      'index' : Number,
     },
     data: () => ({
       selectedItem: null,
@@ -137,10 +130,10 @@
     }),
 
     computed: { 
-      contentItems : function() {
-        return this.items
-      }
     },
+    watch: { 
+    },
+
     created () { 
     },
     mounted() { },
@@ -157,22 +150,20 @@
 
         this.$emit('selected', item)
       },
-      unselect() {
-        this.selectedItem = null
-      },
 
       reset() {
         this.slideModel = null
         this.selectedItem = null
+        this.isRand = false
       },
       refresh() {
-        this.reset()
-        this.isRand = true
+        this.slideModel = null
+        this.selectedItem = null
         this.$emit('reqRefresh')
       },
       reInit() {
-        this.reset()
-        this.isRand = false
+        this.slideModel = null
+        this.selectedItem = null
         this.$emit('reqReInit')
       }
     },
