@@ -8,7 +8,7 @@
         <v-subheader >
           <v-icon class="mr-1">mdi-thumb-up</v-icon>
           추천 영화 콘텐츠
-          <v-switch v-model="isRand" class="ml-2" label="Random"></v-switch>
+          <v-switch v-model="isRand" class="ml-2" label="Shuffle"></v-switch>
         </v-subheader>
 
         <v-sheet 
@@ -62,6 +62,7 @@
             ></v-skeleton-loader>
           -->
           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular> 
+          {{item.title}}
         </v-row>
       </template>
       
@@ -72,7 +73,7 @@
           <v-btn class="v-btn-search"
             fab small
             right bottom
-            @click="searchThis(item)"
+            @click="searchThis(item.title)"
           >
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
@@ -87,6 +88,7 @@
   >
       <v-chip v-for="(tag, i) in item.rep_kwd" :key="tag+i"
               class="pa-1 mt-1 mr-1"
+              @click="searchThis(tag)"
       >{{tag}}
       </v-chip>
   </v-card-text> 
@@ -246,7 +248,7 @@
 
       searchThis(selected) {
         console.log('searchThis : ', selected)
-        this.$emit('searchThis', selected.title)
+        this.$emit('searchThis', selected)
       }
 
     },
