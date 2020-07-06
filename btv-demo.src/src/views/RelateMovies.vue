@@ -17,18 +17,18 @@
         />
 
         <v-snackbar
-          v-model="snackbar"
+          v-model="snackBar"
           top
           color="error"
           :timeout="3000"
         >
-          검색 결과가 없어요.
+          {{errMsg}}
           <template v-slot:action="{ attrs }">
             <v-btn
               dark
               text
               v-bind="attrs"
-              @click="snackbar = false"
+              @click="snackBar = false"
             >
               Close
             </v-btn>
@@ -86,7 +86,8 @@
       selectedPickItem: null,
       relateSize: 12 * 5,  //grid로 표현되므로 12의 배수가 적당
 
-      snackbar: false
+      snackBar: false,
+      errMsg: ''
     }),
 
     created () {
@@ -128,7 +129,8 @@
             let result = filterCatchon(res.data.response.documents)
 
             if (!result || result.length < 1){
-              this.snackbar = true
+              this.errMsg = `'${searchText}'의 검색 결과가 없어요.`
+              this.snackBar = true
               return
             }
             
