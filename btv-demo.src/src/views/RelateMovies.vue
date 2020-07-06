@@ -1,23 +1,43 @@
 <template>
-      <v-container pa-0 ma-0
-      >
-        <v-layout >
-          <v-flex >
-            <!-- first result list -->
-            <movie-list ref="topList"
-              :items="topItems" :header="headerTop" 
-              @selected="searchRelate"
-              @reqRefresh="refreshRand" @reqReInit="resetSearch"
-            />
-            
-            <!-- 연관 영화 목록 -->
-            <movie-grid  v-if="selectedPickItem"
-              :pickItem="selectedPickItem" :itemSize="relateSize"
-              @searchThis="searchKeyword"
-            />
-          </v-flex>
-        </v-layout>
-      </v-container>
+  <v-container pa-0 ma-0
+  >
+    <v-layout >
+      <v-flex >
+        <!-- first result list -->
+        <movie-list ref="topList"
+          :items="topItems" :header="headerTop" 
+          @selected="searchRelate"
+          @reqRefresh="refreshRand" @reqReInit="resetSearch"
+        />
+        
+        <!-- 연관 영화 목록 -->
+        <movie-grid  v-if="selectedPickItem"
+          :pickItem="selectedPickItem" :itemSize="relateSize"
+          @searchThis="searchKeyword"
+        />
+
+        <v-snackbar
+          v-model="snackbar"
+          top
+          color="error"
+          :timeout="3000"
+        >
+          검색 결과가 없어요.
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              dark
+              text
+              v-bind="attrs"
+              @click="snackbar = false"
+            >
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 <script>
   function getRandomInt(min, max) {
@@ -65,6 +85,8 @@
 
       selectedPickItem: null,
       relateSize: 12 * 5,  //grid로 표현되므로 12의 배수가 적당
+
+      snackbar: false
     }),
 
     created () {
@@ -90,9 +112,6 @@
       },
 
       searchKeyword(searchText) {
-        if (this.$refs.topList)
-          this.$refs.topList.reset()
-
         if (!searchText) {
           this.resetSearch()
           return
@@ -106,8 +125,17 @@
           }
         )
           .then(res => {
-            this.topItems = filterCatchon(res.data.response.documents)
+            let result = filterCatchon(res.data.response.documents)
+
+            if (!result || result.length < 1){
+              this.snackbar = true
+              return
+            }
+            
+            if (this.$refs.topList)
+              this.$refs.topList.reset()
             this.headerTop = '검색 결과'
+            this.topItems = result
           })
           .catch(err => {
             console.error(err)
