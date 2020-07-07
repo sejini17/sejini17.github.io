@@ -1055,6 +1055,11 @@
   resolved "https://registry.yarnpkg.com/@vue/cli-plugin-vuex/-/cli-plugin-vuex-4.4.3.tgz#e6f34eee0c61cf46ed114d06546d870eb97ee2b4"
   integrity sha512-gw+rNF05hcWSYujVPgkS/+9u8A5lwqXtjaYxRGzN0GKU5kHmhEJn2+kNKzkeOCnWAh+Cvq7pY8SapKV10df9pA==
 
+"@vue/cli-plugin-vuex@~4.4.0":
+  version "4.4.6"
+  resolved "https://registry.npm.taobao.org/@vue/cli-plugin-vuex/download/@vue/cli-plugin-vuex-4.4.6.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vue%2Fcli-plugin-vuex%2Fdownload%2F%40vue%2Fcli-plugin-vuex-4.4.6.tgz#44b596f0d5236e0a2ce1aa4757bda5207c230be0"
+  integrity sha1-RLWW8NUjbgos4apHV72lIHwjC+A=
+
 "@vue/cli-service@~4.4.0":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-4.4.3.tgz#228a659cc92b7dfea5d5ac19948638a072217a57"
@@ -8073,6 +8078,11 @@ vuetify@^2.2.11:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.3.0.tgz#c78854c7e7abe2674d88d8832950f951789e9193"
   integrity sha512-55lQr5878vACGD+jldcttpaGybZf4Qb1uo8WPdT97a179TuDCkPPxWEThRfMlgcpf5kfxae4c5ox+mfgmb/V6Q==
+
+vuex@^3.4.0:
+  version "3.5.1"
+  resolved "https://registry.npm.taobao.org/vuex/download/vuex-3.5.1.tgz#f1b8dcea649bc25254cf4f4358081dbf5da18b3d"
+  integrity sha1-8bjc6mSbwlJUz09DWAgdv12hiz0=
 
 watchpack-chokidar2@^2.0.0:
   version "2.0.0"
