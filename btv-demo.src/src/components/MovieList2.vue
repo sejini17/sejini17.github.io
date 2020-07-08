@@ -147,11 +147,9 @@
         default: 'mobile'
       },
 
-      'theme' : String,
-      'index' : Number,
+      'items' : Array,
     },
     data: () => ({
-      items: [],
       selectedItem: null,
 
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
@@ -161,21 +159,6 @@
     computed: { 
     },
     created () { 
-      if (this.theme) {
-        console.log(this.index, this.theme)
-        setTimeout(() => {
-          this.$axios.post(
-            '/vod/btv/api/v1.0/theme-search', 
-            {
-              'query' : this.theme,
-              'topn' : 10
-            }
-          )
-          .then(res => {
-            this.items = res.data
-          })
-        }, this.index * 500)
-      }
     },
     mounted() { },
 

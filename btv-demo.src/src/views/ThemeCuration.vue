@@ -3,12 +3,9 @@
   >
     <v-layout >
       <v-flex >
-        <!-- 
-        ref="topList" @selected="searchRelate"
-        -->
-        <template v-for="(theme, i) in themes">
-          <movie-list2 :items="topItems" :header="theme" :key="theme"
-            :theme="theme" :index="i"
+        <template v-for="(theme) in $store.state.themeList">
+          <movie-list2 :key="theme.header"
+            :header="theme.header" :items="theme.items"
           />
         </template>
 
@@ -21,34 +18,7 @@
 
 
 <script>
-  import MovieList2 from '@/components/MovieList2';
-
-  export default {
-    name: 'ThemeCuration',
-    components: {
-      MovieList2,
-    },
-
-    props: {
-      searchText: String,
-    },
-    data: () => ({
-      topItems: [],
-      headerTop: '',
-      themes: []
-    }),
-
-    created () {
-      this.$eventBus.$on('searchKeyword', 
-        (value) => this.searchKeyword(value)
-      )
-    },
-    mounted() {
-      this.resetSearch()
-    },
-    methods: {
-      resetSearch() {
-        this.themes = `
+const themePreset = `
 눈을 사로잡는 영상미의 영화
 아이들과 함께 보기 좋은 영화
 의리의리한 우정을 그린 영화
@@ -87,6 +57,34 @@
 투자가치 200%의 주식 영화
 `.split('\n').filter(l => l.length != 0)
 // .slice(-3) //debug용
+
+  import MovieList2 from '@/components/MovieList2';
+
+  export default {
+    name: 'ThemeCuration',
+    components: {
+      MovieList2,
+    },
+
+    props: {
+      searchText: String,
+    },
+    data: () => ({
+    }),
+
+    created () {
+      this.$eventBus.$on('searchKeyword', 
+        (value) => this.searchKeyword(value)
+      )
+      
+      this.$store.dispatch('loadThemePreset', themePreset)
+    },
+    mounted() {
+      this.resetSearch()
+    },
+    methods: {
+      resetSearch() {
+        this.$store.commit('setThemeDefault')
       },
 
       searchKeyword(searchText) {
@@ -95,7 +93,7 @@
           return
         }
 
-        this.themes = [searchText]
+        this.$store.dispatch('searchTheme', searchText)
       },
     },
   }
