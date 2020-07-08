@@ -8,7 +8,7 @@
           {{ header }}
 
           <v-btn-toggle class="ml-2"
-            v-model="isRand"
+            v-model="isShuffle"
             borderless
             mandatory
             dense
@@ -126,7 +126,7 @@
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
       slideModel: null,
 
-      isRand: false
+      isShuffle: false
     }),
 
     computed: { 
@@ -154,7 +154,7 @@
       reset() {
         this.slideModel = null
         this.selectedItem = null
-        this.isRand = false
+        this.isShuffle = false
       },
       refresh() {
         this.slideModel = null
