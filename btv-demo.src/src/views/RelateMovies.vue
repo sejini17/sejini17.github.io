@@ -91,6 +91,11 @@
       snackBar: false,
       errMsg: ''
     }),
+    computed: {
+      // topList() {
+      //   return this.$store.state.top100
+      // }
+    },
 
     created () {
       this.$eventBus.$on('searchKeyword', 
@@ -138,7 +143,7 @@
             
             if (this.$refs.topList)
               this.$refs.topList.reset()
-            this.headerTop = '검색 결과'
+            this.headerTop = `'${searchText}'의 검색 결과`
             this.topItems = result
             this.$vuetify.goTo(0)
           })

@@ -6,7 +6,7 @@ import ThemeCuration from '../views/ThemeCuration.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'home',
