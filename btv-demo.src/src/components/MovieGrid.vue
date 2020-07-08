@@ -8,7 +8,27 @@
         <v-subheader >
           <v-icon class="mr-1">mdi-thumb-up</v-icon>
           추천 영화 콘텐츠
-          <v-switch v-model="isRand" class="ml-2" label="Shuffle"></v-switch>
+
+          <v-btn-toggle class="ml-2"
+            v-model="isShuffle"
+            borderless
+            mandatory
+            dense
+          >
+            <v-btn value="N"
+              @click="searchSimContent('N')"
+            >
+              <span class="hidden-sm-and-down">Ordered</span>
+              <v-icon right>mdi-shuffle-disabled</v-icon>
+            </v-btn>
+
+            <v-btn value="Y"
+              @click="searchSimContent('Y')"
+            >
+              <span class="hidden-sm-and-down">Shuffle</span>
+              <v-icon right>mdi-shuffle</v-icon>
+            </v-btn>
+          </v-btn-toggle>
         </v-subheader>
 
         <v-sheet 
@@ -191,15 +211,12 @@
       showDialog: false,
 
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
-      isRand: false
+      isShuffle: false
     }),
 
     computed: { },
     watch: { 
       pickItem: function() {
-        this.searchSimContent()
-      },
-      isRand: function() {
         this.searchSimContent()
       },
     },
@@ -213,13 +230,22 @@
         this.selectedItem = null
       },
 
-      searchSimContent() {
+      searchSimContent(shuffle) {
+        if (shuffle) {
+          if (this.isShuffle == shuffle && shuffle == 'N')
+            return
+          this.isShuffle = shuffle
+        }
+
+        console.log("this.isShuffle", this.isShuffle)
+        this.items = []
+
         this.$axios.post(
           '/vod/btv/api/v1.0/sim_content', 
           {
             's_id': this.pickItem.series_id,
             'topn': this.itemSize,
-            'rand': this.isRand
+            'rand': this.isShuffle == 'Y'
           }
         )
           .then(res => {
@@ -227,7 +253,6 @@
             // .sort( //정렬순서는 서버에서 하는걸로. 2020-0619
             //   (a, b) => a.dist - b.dist // 오름차순
             // );
-            // this.headerReleate = '추천 영화 콘텐츠'
           })
           .catch(err => {
             console.error(err)
