@@ -4,14 +4,14 @@
     <v-layout >
       <v-flex >
         <!-- first result list -->
-        <movie-list ref="topList"
+        <MovieList ref="topList"
           :items="topItems" :header="headerTop" 
           @selected="(item) => selectedPickItem = item"
           @reqOrdered="resetSearch" @reqShuffle="shuffle" 
         />
         
         <!-- 연관 영화 목록 -->
-        <movie-grid  v-if="selectedPickItem"
+        <MovieGrid  v-if="selectedPickItem"
           :pickItem="selectedPickItem" :itemSize="relateSize"
         />
 
