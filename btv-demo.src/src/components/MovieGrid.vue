@@ -5,10 +5,11 @@
     <v-row>
       <v-col>
 
-        <v-subheader >
+        <v-subheader class="ma-0 pa-0">
           <v-icon class="mr-1">mdi-thumb-up</v-icon>
           추천 영화 콘텐츠
 
+        <v-spacer />
           <v-btn-toggle class="ml-2"
             v-model="isShuffle"
             borderless
@@ -54,6 +55,7 @@
   max-width="115"
   class="ms-4 "
   flat tile
+  ripple
   >
   
   <v-container 
@@ -93,7 +95,7 @@
           <v-btn class="v-btn-search"
             fab small
             right bottom
-            @click="searchThis(item.title)"
+            @click.stop="searchThis(item.title)"
           >
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
@@ -108,7 +110,7 @@
   >
       <v-chip v-for="(tag, i) in item.rep_kwd" :key="tag+i"
               class="pa-1 mt-1 mr-1"
-              @click="searchThis(tag)"
+              @click.stop="searchThis(tag)"
       >{{tag}}
       </v-chip>
   </v-card-text> 
@@ -273,7 +275,7 @@
 
       searchThis(selected) {
         console.log('searchThis : ', selected)
-        this.$emit('searchThis', selected)
+        this.$eventBus.$emit('searchKeyword', selected)
       }
 
     },
