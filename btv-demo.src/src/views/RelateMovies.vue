@@ -6,14 +6,13 @@
         <!-- first result list -->
         <movie-list ref="topList"
           :items="topItems" :header="headerTop" 
-          @selected="searchRelate"
-          @reqRefresh="refreshRand" @reqReInit="resetSearch"
+          @selected="(item) => selectedPickItem = item"
+          @reqOrdered="resetSearch" @reqShuffle="shuffle" 
         />
         
         <!-- 연관 영화 목록 -->
         <movie-grid  v-if="selectedPickItem"
           :pickItem="selectedPickItem" :itemSize="relateSize"
-          @searchThis="searchKeyword"
         />
 
         <BtnScrollToTop />
@@ -115,7 +114,7 @@
 
         this.headerTop = 'Top Pick'
       },
-      refreshRand() {
+      shuffle() {
         this.topItems = getRandomItem(this.topItems)
       },
 
@@ -152,10 +151,6 @@
           })
       },
 
-      searchRelate(item) {
-        //MovieGrid로 표시
-        this.selectedPickItem = item
-      },
     },
   }
 </script>

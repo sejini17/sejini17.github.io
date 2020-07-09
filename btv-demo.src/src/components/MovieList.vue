@@ -3,10 +3,11 @@
         
     <v-row no-gutters dense>
       <v-col>
-        <v-subheader >
+        <v-subheader class="ma-0 pa-0">
           <v-icon class="mr-1">mdi-movie-search</v-icon>
           {{ header }}
 
+        <v-spacer />
           <v-btn-toggle class="ml-2"
             v-model="isShuffle"
             borderless
@@ -14,14 +15,14 @@
             dense
           >
             <v-btn value="false"
-              @click="reInit()"
+              @click="shuffle()"
             >
               <span class="hidden-sm-and-down">Ordered</span>
               <v-icon right>mdi-shuffle-disabled</v-icon>
             </v-btn>
 
             <v-btn value="true"
-              @click="refresh()"
+              @click="shuffle(true)"
             >
               <span class="hidden-sm-and-down">Shuffle</span>
               <v-icon right>mdi-shuffle</v-icon>
@@ -38,7 +39,11 @@
           <v-col>
             <v-sheet 
             >
-              <!-- slide ----------------------------------------------------------->
+              <!-- slide ---------------------------------------------------------
+              <MovieSlide :items="items" :model="slideModel" :showArrows="showArrows"
+                      @showDetail="showDetail"
+              />
+              -->
               <v-slide-group v-if="items"
                 v-model="slideModel"
                 class="pa-4" 
@@ -151,21 +156,18 @@
         this.$emit('selected', item)
       },
 
-      reset() {
+      resetSelection() {
         this.slideModel = null
         this.selectedItem = null
+      },
+      reset() {
+        this.resetSelection()
         this.isShuffle = false
       },
-      refresh() {
-        this.slideModel = null
-        this.selectedItem = null
-        this.$emit('reqRefresh')
+      shuffle(isShuffle) {
+        this.resetSelection()
+        this.$emit(isShuffle ? 'reqShuffle' : 'reqOrdered')
       },
-      reInit() {
-        this.slideModel = null
-        this.selectedItem = null
-        this.$emit('reqReInit')
-      }
     },
   }
 </script>
