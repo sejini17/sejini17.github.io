@@ -20,7 +20,7 @@
         유사 영화 검색
       </v-btn> 
 -->
-      <v-spacer></v-spacer>
+      <v-spacer />
 <!--       
         <v-switch v-model="$vuetify.theme.dark" label="Dark theme" />
            -->
@@ -74,7 +74,9 @@
           </v-layout>
         </v-img>
 
-        <router-view/> 
+        <keep-alive>
+          <router-view/> 
+        </keep-alive>
 
       </v-container>
     </v-main>
@@ -85,6 +87,8 @@
       app
     >
       <span class="white--text">&copy; 2020 SKT</span>
+      <v-spacer></v-spacer>
+      ver.2020-0709
     </v-footer>
   </v-app>
 </template>
@@ -101,14 +105,16 @@
     }),
     created () {
       this.$vuetify.theme.dark = true
+      this.$eventBus.$on('searchKeyword', 
+        (value) => {
+          if (this.searchText != value)
+            this.searchText = value
+        }
+      )
     },
     mounted() {
     },
     methods: {
-      resetValidation () {
-        this.$refs.form.resetValidation()
-      },
-
       resetSearch() {
         console.log('resetSearch')
         this.$eventBus.$emit('searchKeyword')
@@ -119,7 +125,7 @@
           this.resetSearch()
           return
         }
-        console.log('searchKeyword : ', this.searchText)
+        console.log('searchKeyword :', this.searchText)
         this.$eventBus.$emit('searchKeyword', this.searchText)
       },
     },
