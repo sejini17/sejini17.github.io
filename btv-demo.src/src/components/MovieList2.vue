@@ -3,15 +3,36 @@
         
     <v-row no-gutters dense>
       <v-col>
-        <v-subheader >
+        <v-subheader class="ma-0 pa-0">
           {{ header }}
-        </v-subheader>
+        <v-spacer />
+          <v-btn-toggle class="ml-2"
+            v-model="isShuffle"
+            borderless
+            mandatory
+            dense
+          >
+            <v-btn value="false"
+              @click="shuffle()"
+            >
+              <span class="hidden-sm-and-down">Ordered</span>
+              <v-icon right>mdi-shuffle-disabled</v-icon>
+            </v-btn>
+
+            <v-btn value="true"
+              @click="shuffle(true)"
+            >
+              <span class="hidden-sm-and-down">Shuffle</span>
+              <v-icon right>mdi-shuffle</v-icon>
+            </v-btn>
+          </v-btn-toggle>
 <!--         
         <v-btn color="orange" icon  >
           <v-icon>mdi-cached</v-icon>
         </v-btn> 
-            <v-sheet :max-width="selectedItem ? 900 : ''"
 -->
+        </v-subheader>
+
         <v-row no-gutters dense>
           <v-col>
             <v-sheet 
@@ -142,18 +163,21 @@
     },
 
     props: {
+      'theme' : String,
+      'items' : Array,
+
       'header' : String,
       'showArrows': {
         default: 'mobile'
       },
-
-      'items' : Array,
     },
     data: () => ({
       selectedItem: null,
 
       urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
-      slideModel: null
+      slideModel: null,
+
+      isShuffle: false
     }),
 
     computed: { 
@@ -175,9 +199,17 @@
         this.$emit('selected', item)
       },
 
-      reset() {
+      resetSelection() {
         this.slideModel = null
         this.selectedItem = null
+      },
+      reset() {
+        this.resetSelection()
+        this.isShuffle = false
+      },
+      shuffle(isShuffle) {
+        this.resetSelection()
+        this.$store.dispatch('refreshTheme', {theme: this.theme, isShuffle})
       },
     },
   }

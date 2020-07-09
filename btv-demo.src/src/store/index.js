@@ -17,13 +17,15 @@ function filterCatchon(arr) {
     : []
 }
 
-async function getThemeItem(searchText) {
+async function getThemeItem(searchText, isShuffle = false) {
   return {
+    theme : searchText,
     header : searchText,
     items : (await axios.post(
       '/vod/btv/api/v1.0/theme-search', 
       {
         'query' : searchText,
+        'rand' : isShuffle,
         'topn' : 10
       }
     )).data
@@ -51,15 +53,20 @@ export default new Vuex.Store({
       state.top100 = status
     },
 
-    addThemePreset (state, theme) {
-      state.themePreset.push(theme)
+    addThemePreset (state, themeItem) {
+      state.themePreset.push(themeItem)
     },
     setThemeDefault (state) {
       state.themeList = state.themePreset
     },
     
-    setTheme (state, theme) {
-      state.themeList = [theme]
+    setTheme (state, themeItem) {
+      state.themeList = [themeItem]
+    },
+    replaceTheme (state, themeItem) {
+      const i = state.themeList.findIndex(item => item.theme == themeItem.theme)
+      // console.log("i:", i, themeItem)
+      state.themeList.splice(i, 1, themeItem)
     },
   },
   
@@ -86,10 +93,12 @@ export default new Vuex.Store({
       }
     },
 
-    searchTheme ({ commit }, searchText) {
-      getThemeItem(searchText)
-      .then(item => 
-        commit('setTheme', item)
+    refreshTheme ({ commit }, {theme, isShuffle}) {
+      getThemeItem(theme, isShuffle)
+      .then(item => {
+        // console.log("item:", item)
+        commit('replaceTheme', item)
+      }
       )
     }
   },

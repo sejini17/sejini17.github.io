@@ -3,13 +3,33 @@
   >
     <v-layout >
       <v-flex >
-        <template v-for="(theme) in $store.state.themeList">
-          <movie-list2 :key="theme.header"
-            :header="theme.header" :items="theme.items"
+        <template v-for="(item) in $store.state.themeList">
+          <movie-list2 :key="item.header"
+            :theme="item.theme"
+            :header="item.header" :items="item.items"
           />
         </template>
 
         <BtnScrollToTop />
+
+        <v-snackbar
+          v-model="snackBar"
+          top
+          color="error"
+          :timeout="3000"
+        >
+          {{errMsg}}
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              dark
+              text
+              v-bind="attrs"
+              @click="snackBar = false"
+            >
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
 
       </v-flex>
     </v-layout>
@@ -67,9 +87,10 @@ const themePreset = `
     },
 
     props: {
-      searchText: String,
     },
     data: () => ({
+      snackBar: false,
+      errMsg: ''
     }),
 
     created () {
@@ -93,7 +114,23 @@ const themePreset = `
           return
         }
 
-        this.$store.dispatch('searchTheme', searchText)
+        this.$axios.post(
+          '/vod/btv/api/v1.0/theme-search', 
+          {
+            'query' : searchText,
+            'topn' : 10
+          }
+        ).then(res => {
+          this.$store.commit('setTheme', {
+            theme : searchText,
+            header : searchText,
+            items : res.data
+          })
+        })
+        .catch(() => {
+          this.errMsg = `'${searchText}'의 검색 결과가 없어요.`
+          this.snackBar = true
+        })
       },
     },
   }
