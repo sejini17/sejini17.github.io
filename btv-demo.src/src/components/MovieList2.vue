@@ -37,55 +37,17 @@
           <v-col>
             <v-sheet 
             >
-              <!-- slide ----------------------------------------------------------->
-              <v-slide-group v-if="items"
-                v-model="slideModel"
-                class="pa-4" 
-                center-active
-                :show-arrows="showArrows"
-              >
-                <v-slide-item
-                  v-for="item in items"
-                  :key="item.series_id" 
-                  v-slot:default="{ active, toggle }"
-                >
-                  <v-card
-                    :color="active ? 'primary' : 'black'"
-                    @click="toggle"
-                    height="156"
-                    width="115"
-                    class="ma-4 pa-1"
-
-                    ripple
-                    :raised="!item.blur"
-                    align-center justify-center
-                  >
-                    <v-img
-                      :src="item.img ? item.img : urlImg + item.thumbnail"
-                      @click="showDetail(item)"
-                    >
-                      <!-- 이미지가 표시되지 않으면 계속 돌고있어서 CPU를 사용하는 문제가 있음
-                        <template v-slot:placeholder>
-                        
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                        </v-row>
-                      </template> -->
-                    </v-img>
-                  </v-card>
-                </v-slide-item>
-              </v-slide-group>
+              <!-- slide ---------------------------------------------------------
+              -->
+              <MovieSlide :items="items"
+                :showArrows="showArrows"
+                @selected="showDetail"
+              />
             </v-sheet>
-
             
           </v-col>
         </v-row>
-        <v-row v-if="slideModel != null && selectedItem"
-          
+        <v-row v-if="selectedItem"
           dense>
           <v-col>
 <!--             
@@ -155,44 +117,35 @@
 <script>
   import apiBtv from '@/api/vod-btv-api'
   import MovieDetail from '@/components/MovieDetail';
+  import MovieSlide from '@/components/MovieSlide';
 
   export default {
     name: 'MovieList2',
     components: {
-      MovieDetail
+      MovieDetail,
+      MovieSlide
     },
 
     props: {
-      'theme' : String,
-      'items' : Array,
-
       'header' : String,
       'showArrows': {
-        default: 'mobile'
-      },
+        },
+
+      'items' : Array,
+      'theme' : String,
     },
     data: () => ({
       selectedItem: null,
 
-      urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
-      slideModel: null,
-
       isShuffle: false
     }),
 
-    computed: { 
-    },
-    created () { 
-    },
-    mounted() { },
-
     methods: {
       async showDetail(item) {
-        console.log('selected : ', item)
-
-        if (!item) return
-
-        // this.selectedItem = item
+        if (!item) {
+          this.selectedItem = null
+          return
+        }
         //api에서 상세정보 가져오기 추가처리
         this.selectedItem = await apiBtv.getMetaById(item.series_id)
 
@@ -200,7 +153,6 @@
       },
 
       resetSelection() {
-        this.slideModel = null
         this.selectedItem = null
       },
       reset() {
