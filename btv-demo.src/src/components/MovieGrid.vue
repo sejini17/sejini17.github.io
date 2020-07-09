@@ -110,7 +110,7 @@
   >
       <v-chip v-for="(tag, i) in item.rep_kwd" :key="tag+i"
               class="pa-1 mt-1 mr-1"
-              @click.stop="searchThis(tag)"
+              @click.stop="searchThis(tag)" to="/theme"
       >{{tag}}
       </v-chip>
   </v-card-text> 
@@ -239,7 +239,7 @@
           this.isShuffle = shuffle
         }
 
-        console.log("this.isShuffle", this.isShuffle)
+        console.log("this.isShuffle", this.isShuffle, this.pickItem)
         this.items = []
 
         this.$axios.post(
@@ -267,7 +267,7 @@
         this.selectedItem = await apiBtv.getMetaById(item.series_id)
         if (!this.selectedItem)
             return
-        console.log('showDetail : ', item.series_id)
+        console.log(item.series_id, this.selectedItem)
 
         this.showDialog = true
         this.$emit('selected', item)

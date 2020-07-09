@@ -60,27 +60,12 @@
       >키워드</v-col>
       <v-col cols=4
       >
-
-        <template v-if="item.kwd_refine && item.kwd_refine.length">
-          <v-chip v-for="(value, i) in item.kwd_refine.slice(0, keywordSize)" :key="value+i"
+        <template v-if="keywords">
+          <v-chip v-for="(kwd, i) in keywords.result" :key="kwd+i"
                   class="pa-2 ma-1"
-          >{{value}}
-          </v-chip>
-        </template>
-
-        <template v-else-if="item.kmdb_kwd && item.kmdb_kwd.length">
-          <v-chip  v-for="(value, i) in item.kmdb_kwd.slice(0, keywordSize)" :key="value+i"
-                  text-color="warning"
-                  class="pa-2 ma-1"
-          >{{value}}
-          </v-chip>
-        </template>
-        
-        <template v-else-if="item.kb_kmdb_keyword && item.kb_kmdb_keyword.length">
-          <v-chip  v-for="(value, i) in item.kb_kmdb_keyword.slice(0, keywordSize)" :key="value+i"
-                  text-color="primary" 
-                  class="pa-2 ma-1"
-          >{{value}}
+                  :text-color="keywords.textColor"
+                  @click="$eventBus.$emit('searchKeyword', kwd)" to="/theme"
+          >{{kwd}}
           </v-chip>
         </template>
 
@@ -120,9 +105,6 @@
     props: [
       'item',
     ],
-    components: {
-    },
-
     data: () => ({
       keywordSize: 10,
       thWidth : 2
@@ -134,24 +116,36 @@
           return this.item.actor_role_code
             .map((n, index) => [n, this.item.actor[index]])
             .filter( _ => _[0] == '01') //주연만
+        },
+        keywords : function () {
+          let result, textColor
+          const {kwd_refine, kmdb_kwd, kb_kmdb_keyword} = this.item
+
+          if (kwd_refine && kwd_refine.length) {
+            result = kwd_refine
+          }
+          else if (kmdb_kwd && kmdb_kwd.length) {
+            result = kmdb_kwd
+            textColor = 'warning'
+          }
+          else if (kb_kmdb_keyword && kb_kmdb_keyword.length) {
+            result = kb_kmdb_keyword
+            textColor = 'primary'
+          }
+          else
+            return
+
+          return {result : result.slice(0, this.keywordSize), textColor}
         }
     },
-    watch: {
-    },
+    
     filters: {
       comma(val){
         return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
     },
 
-    created () { 
-    },
-    mounted() { 
-    },
-
     methods: {
     },
   }
 </script>
-<style scoped>
-</style>
