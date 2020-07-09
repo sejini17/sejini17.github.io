@@ -4,9 +4,8 @@
     <v-row no-gutters dense>
       <v-col>
         <v-subheader class="ma-0 pa-0">
-          <v-icon class="mr-1">mdi-movie-search</v-icon>
+          <v-icon class="mr-1" v-if="!(this.theme)">mdi-movie-search</v-icon>
           {{ header }}
-
         <v-spacer />
           <v-btn-toggle class="ml-2"
             v-model="isShuffle"
@@ -28,10 +27,10 @@
               <v-icon right>mdi-shuffle</v-icon>
             </v-btn>
           </v-btn-toggle>
-<!--
-          <v-btn color="green" icon @click="refresh()" v-if="refreshable" >
-            <v-icon>mdi-cached</v-icon>
-          </v-btn> 
+<!--         
+        <v-btn color="orange" icon  >
+          <v-icon>mdi-cached</v-icon>
+        </v-btn> 
 -->
         </v-subheader>
 
@@ -40,11 +39,13 @@
             <v-sheet 
             >
               <!-- slide ---------------------------------------------------------
-              <MovieSlide :items="items" :model="slideModel" :showArrows="showArrows"
-                      @showDetail="showDetail"
+              <MovieSlide ref="slide"
+                :items="items"
+                :showArrows="showArrows"
+                @selected="showDetail"
               />
               -->
-              <v-slide-group v-if="items"
+              <v-slide-group v-show="items"
                 v-model="slideModel"
                 class="pa-4" 
                 center-active
@@ -69,30 +70,41 @@
                       :src="item.img ? item.img : urlImg + item.thumbnail"
                       @click="showDetail(item)"
                     >
+                      <!-- 이미지가 표시되지 않으면 계속 돌고있어서 CPU를 사용하는 문제가 있음
+                        <template v-slot:placeholder>
+                        
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                        </v-row>
+                      </template> -->
                     </v-img>
                   </v-card>
                 </v-slide-item>
               </v-slide-group>
             </v-sheet>
-
             
           </v-col>
         </v-row>
-
         <v-row v-if="slideModel != null && selectedItem"
           dense>
           <v-col>
 
             <v-card ma-0 pa-0>
               <v-expansion-panels>
-              <v-expansion-panel
-              >
-                <v-expansion-panel-header>상세정보 : {{selectedItem.title_display}}</v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <MovieDetail :item="selectedItem" 
-                  />
-                </v-expansion-panel-content>
-              </v-expansion-panel>
+                <v-expansion-panel
+                >
+                  <v-expansion-panel-header>상세정보 : {{selectedItem.title_display}}
+                  </v-expansion-panel-header>
+                  
+                  <v-expansion-panel-content>
+                    <MovieDetail :item="selectedItem" 
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </v-expansion-panels>
               
             </v-card>
@@ -112,44 +124,33 @@
   export default {
     name: 'MovieList',
     components: {
-      MovieDetail
+      MovieDetail,
     },
 
     props: {
       'header' : String,
-      'items' : {
-        required: true
-      },
-
       'showArrows': {
         default: 'mobile'
       },
+
+      'items' : Array,
+      'theme' : String,
     },
     data: () => ({
+      isShuffle: false,
+
       selectedItem: null,
 
-      urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
       slideModel: null,
-
-      isShuffle: false
+      urlImg: 'http://stimage.hanafostv.com:8080/thumbnails/iip/115_156',
     }),
-
-    computed: { 
-    },
-    watch: { 
-    },
-
-    created () { 
-    },
-    mounted() { },
 
     methods: {
       async showDetail(item) {
-        console.log('selected : ', item)
-
-        if (!item) return
-
-        // this.selectedItem = item
+        if (!item) {
+          this.selectedItem = null
+          return
+        }
         //api에서 상세정보 가져오기 추가처리
         this.selectedItem = await apiBtv.getMetaById(item.series_id)
 
@@ -166,7 +167,10 @@
       },
       shuffle(isShuffle) {
         this.resetSelection()
-        this.$emit(isShuffle ? 'reqShuffle' : 'reqOrdered')
+        if (this.theme)
+          this.$store.dispatch('refreshTheme', {theme: this.theme, isShuffle})
+        else
+          this.$emit(isShuffle ? 'reqShuffle' : 'reqOrdered')
       },
     },
   }

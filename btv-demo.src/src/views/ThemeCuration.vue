@@ -4,7 +4,7 @@
     <v-layout >
       <v-flex >
         <template v-for="(item) in $store.state.themeList">
-          <movie-list2 :key="item.header"
+          <MovieList :key="item.header"
             :theme="item.theme"
             :header="item.header" :items="item.items"
           />
@@ -78,12 +78,12 @@ const themePreset = `
 `.split('\n').filter(l => l.length != 0)
 // .slice(-3) //debug용
 
-  import MovieList2 from '@/components/MovieList2';
+  import MovieList from '@/components/MovieList';
 
   export default {
     name: 'ThemeCuration',
     components: {
-      MovieList2,
+      MovieList,
     },
 
     props: {
