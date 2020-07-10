@@ -1,10 +1,8 @@
 <template>
-  <v-app id="inspire">
+  <v-app >
     <!-- app-bar -------------------------------------------------------->
-    <v-app-bar
-      app
+    <v-app-bar app
       color="#595959"
-      dark
     >
       <i class="ico btv_icon" ></i>
       <v-toolbar-title class="pr-4">Btv Recommendation Demo</v-toolbar-title>
@@ -88,7 +86,7 @@
     >
       <span class="white--text">&copy; 2020 SKT</span>
       <v-spacer></v-spacer>
-      ver.2020-0709
+      ver.2020-0710_2
     </v-footer>
   </v-app>
 </template>
