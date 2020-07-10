@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import RelateMovies from '../views/RelateMovies.vue'
 import ThemeCuration from '../views/ThemeCuration.vue'
 
+// import Login from '../views/Login.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -12,6 +14,20 @@ const routes = [
     name: 'home',
     component: RelateMovies
   },
+
+  {
+    path: '/login',
+    name: 'Login',
+    //   // route level code-splitting, lazy-loaded when the route is visited.
+    component: () => import('../views/user/Login.vue')
+  },
+  {
+    path: '/regist',
+    name: 'Regist',
+    //   // route level code-splitting, lazy-loaded when the route is visited.
+    component: () => import('../views/user/Regist.vue')
+  },
+
   {
     path: '/relate',
     name: 'RelateMovies',
@@ -22,14 +38,6 @@ const routes = [
     name: 'ThemeCuration',
     component: ThemeCuration
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
 ]
 
 const router = new VueRouter({
