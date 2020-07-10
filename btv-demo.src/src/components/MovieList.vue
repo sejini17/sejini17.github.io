@@ -4,8 +4,15 @@
     <v-row no-gutters dense>
       <v-col>
         <v-subheader class="ma-0 pa-0">
-          <v-icon class="mr-1" v-if="!(this.theme)">mdi-movie-search</v-icon>
-          {{ header }}
+          <v-icon class="mr-1" v-if="!(theme)">mdi-movie-search</v-icon>
+          {{ header }} 
+          <template v-if="theme">
+            <div class="ml-1 kwd"
+              v-for="kwd in theme.split(',').map(kwd => kwd.trim())"
+              :key="kwd"
+            >#{{kwd}}
+            </div>
+          </template>
         <v-spacer />
           <v-btn-toggle class="ml-2"
             v-model="isShuffle"
@@ -175,3 +182,9 @@
     },
   }
 </script>
+
+<style scoped>
+.kwd {
+  color: cornflowerblue;
+}
+</style>

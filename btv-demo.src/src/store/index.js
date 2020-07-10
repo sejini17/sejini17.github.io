@@ -18,9 +18,16 @@ function filterCatchon(arr) {
 }
 
 async function getThemeItem(searchText, isShuffle = false) {
+  let title = searchText
+  const arySearchText = searchText.split('\t')
+  if (arySearchText.length > 1) {
+    searchText = arySearchText[0]
+    title = arySearchText[1]
+  }
+
   return {
     theme : searchText,
-    header : searchText,
+    header : title,
     items : (await axios.post(
       '/vod/btv/api/v1.0/theme-search', 
       {
@@ -79,13 +86,13 @@ export default new Vuex.Store({
           })
     },
 
-    loadThemePreset ({ commit, state }, themeList) {
+    loadThemePreset ({ commit, state }, themePreset) {
       if (state.themePreset.length)
         return
 
-      for(let i in themeList) {
+      for(let i in themePreset) {
         setTimeout(() => {
-          getThemeItem(themeList[i])
+          getThemeItem(themePreset[i])
           .then(item => {
             commit('addThemePreset', item)
           })
