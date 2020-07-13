@@ -175,7 +175,11 @@
       shuffle(isShuffle) {
         this.resetSelection()
         if (this.theme)
-          this.$store.dispatch('refreshTheme', {theme: this.theme, isShuffle})
+          this.$store.dispatch('refreshTheme', {
+            theme: this.theme, 
+            header: this.header, 
+            isShuffle
+            })
         else
           this.$emit(isShuffle ? 'reqShuffle' : 'reqOrdered')
       },

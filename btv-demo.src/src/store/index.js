@@ -93,19 +93,20 @@ export default new Vuex.Store({
       for(let i in themePreset) {
         setTimeout(() => {
           getThemeItem(themePreset[i])
-          .then(item => {
-            commit('addThemePreset', item)
-          })
+            .then(item => {
+              commit('addThemePreset', item)
+            })
         }, i * 500)
       }
     },
 
-    refreshTheme ({ commit }, {theme, isShuffle}) {
+    refreshTheme ({ commit }, {theme, header, isShuffle}) {
+      theme += '\t' + header
       getThemeItem(theme, isShuffle)
-      .then(item => {
-        // console.log("item:", item)
-        commit('replaceTheme', item)
-      }
+        .then(item => {
+          // console.log("item:", item)
+          commit('replaceTheme', item)
+        }
       )
     }
   },
