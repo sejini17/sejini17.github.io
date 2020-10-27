@@ -1,0 +1,95 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: nugu-agent-poll
+server:
+  port: ${PORT:18085}
+
+logging:
+  # file: logs/upon-demo.log
+  pattern:
+    # file: "%d %-5level --- [%thread] %logger{35} : %msg %n"
+    # console: "%d %-5level --- [%thread] %logger{35} : %msg %n"
+    dateformat: yyyy-MM-dd HH:mm:ss.SSS
+
+--- #--------------------------------------------------------------------
+spring:
+  profiles: dev
+
+server:
+  port: ${PORT:80}
+  tomcat:
+    basedir: .
+    accesslog:
+      enabled: true
+      prefix: accesslog
+      buffered: false
+      # directory: /logs
+      # suffix:
+      # file-date-format:
+      # pattern: "[ACCESS] %{org.apache.catalina.AccessLog.RemoteAddr}r %l %t %D %F %B %S vcap_request_id:%{X-Vcap-Request-Id}i"
+      pattern: common
+
+spring.output.ansi.enabled: always
+
+logging:
+  pattern:
+    # console: "%d %-5level - [%thread] %logger{35}: %msg%n"
+    dateformat: MM-dd HH:mm:ss.SSS
+    file: "%-5level %d : %msg %n"
+  # file: /C:\workspace\cache.log
+
+  # level:
+  #   # root: error
+  #   com.skt.upon.controller: DEBUG
+
+proxy-target.url-prefix: http://127.0.0.1:8853
+
+resource.static: /C:\workspace\git_skt_upon\nugu-agent-poll\backend\src\main\resources\public\
+
+management:
+  server:
+    port: 18086
+  endpoints:
+    web:
+      base-path: /actuator
+      path-mapping.health: health
+      exposure:
+        include: '*'
+  # endpoint.health.show-details: always
+  health.elasticsearch.enabled: false
+--- #--------------------------------------------------------------------
+spring:
+  profiles: stg
+
+server:
+  tomcat:
+    basedir: .
+    accesslog:
+      enabled: true
+      prefix: accesslog
+      buffered: false
+      pattern: common
+
+# spring.output.ansi.enabled: always
+
+logging:
+  file: logs/nugu-agent-poll.log
+  pattern:
+    file: "%d %-5level --- [%thread] %logger{35} : %msg %n"
+
+proxy-target.url-prefix: http://127.0.0.1:8853
+
+resource.static: /home/aicsvc/nugu-agent-poll/frontend/
+
+management:
+  server:
+    port: 18086
+  endpoints:
+    web:
+      base-path: /actuator
+      path-mapping.health: health
+      exposure:
+        include: '*'
+  health.elasticsearch.enabled: false

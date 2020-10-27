@@ -1,0 +1,12 @@
+.settings/
+
+.classpath
+.factorypath
+.project
+
+target/
+src/main/resources/public/
+
+logs/
+work/
+node/
