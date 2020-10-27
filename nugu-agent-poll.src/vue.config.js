@@ -3,7 +3,7 @@ module.exports = {
     "vuetify"
   ],
 
-  publicPath: '/',
+  publicPath: '/nap',
   outputDir: '../nap'
   // outputDir: './backend/src/main/resources/public'
 }
